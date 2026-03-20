@@ -10,401 +10,401 @@
 <title>متابعة FDP</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;
-  --accent:#2ea44f;--accent2:#3fb950;--glow:rgba(46,164,79,0.22);
-  --text:#e6edf3;--muted:#8b949e;--danger:#f85149;--dbg:rgba(248,81,73,0.1);
-  --yellow:#d29922;--blue:#388bfd;
+:root {
+  --bg:#0d1117; --surface:#161b22; --surface2:#1c2330; --border:#30363d;
+  --accent:#2ea44f; --accent2:#3fb950; --glow:rgba(46,164,79,0.2);
+  --text:#e6edf3; --muted:#8b949e; --danger:#f85149; --dbg:rgba(248,81,73,0.1);
+  --yellow:#d29922;
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;}
-body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 20%,rgba(46,164,79,.05) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(56,139,253,.04) 0%,transparent 50%);pointer-events:none;z-index:0;}
-.app{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1;}
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+.app { width:100%; max-width:480px; min-height:100vh; display:flex; flex-direction:column; }
 
 /* Header */
-.header{background:#161b22;border-bottom:1px solid var(--border);padding:14px 16px 12px;position:sticky;top:0;z-index:100;}
-.header-top{display:flex;align-items:center;gap:10px;}
-.logo{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),#1a7f37);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 14px var(--glow);flex-shrink:0;}
-.header-text h1{font-size:17px;font-weight:900;line-height:1.1;}
-.header-text p{font-size:10px;color:var(--muted);font-family:'Tajawal',sans-serif;}
-.status-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(46,164,79,.1);border:1px solid rgba(46,164,79,.25);border-radius:20px;padding:2px 9px;font-size:10px;color:var(--accent2);font-family:'Tajawal',sans-serif;margin-top:8px;}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr { background:#161b22; border-bottom:1px solid var(--border); padding:14px 16px 12px; position:sticky; top:0; z-index:100; }
+.hdr-top { display:flex; align-items:center; gap:10px; }
+.logo { width:38px; height:38px; background:linear-gradient(135deg,var(--accent),#1a7f37); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.hdr h1 { font-size:17px; font-weight:900; }
+.hdr p { font-size:10px; color:var(--muted); font-family:'Tajawal',sans-serif; }
+.pill { display:inline-flex; align-items:center; gap:5px; background:rgba(46,164,79,.1); border:1px solid rgba(46,164,79,.25); border-radius:20px; padding:2px 9px; font-size:10px; color:var(--accent2); font-family:'Tajawal',sans-serif; margin-top:8px; }
+.dot { width:5px; height:5px; border-radius:50%; background:var(--accent); animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-/* Stepbar */
-.stepbar{display:flex;align-items:flex-start;padding:10px 12px 0;}
-.step{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;}
-.sc{width:24px;height:24px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--muted);transition:all .3s;}
-.step.active .sc{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 8px var(--glow);}
-.step.done .sc{background:rgba(46,164,79,.2);border-color:var(--accent);color:var(--accent2);}
-.sl{font-size:8px;color:var(--muted);font-family:'Tajawal',sans-serif;white-space:nowrap;}
-.step.active .sl{color:var(--accent2);}
-.con{flex:1;height:2px;background:var(--border);margin-top:11px;transition:background .3s;}
-.con.done{background:var(--accent);}
+/* Steps */
+.steps { display:flex; align-items:flex-start; padding:10px 14px 0; }
+.st { display:flex; flex-direction:column; align-items:center; gap:3px; flex:1; }
+.sc { width:24px; height:24px; border-radius:50%; background:var(--surface2); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:var(--muted); transition:all .25s; }
+.st.on .sc { background:var(--accent); border-color:var(--accent); color:#fff; }
+.st.dn .sc { background:rgba(46,164,79,.2); border-color:var(--accent); color:var(--accent2); }
+.sl { font-size:8px; color:var(--muted); font-family:'Tajawal',sans-serif; white-space:nowrap; }
+.st.on .sl { color:var(--accent2); }
+.ln { flex:1; height:2px; background:var(--border); margin-top:11px; transition:background .25s; }
+.ln.dn { background:var(--accent); }
 
 /* Content */
-.content{flex:1;padding:11px 12px 24px;}
-.page{display:none;flex-direction:column;gap:12px;animation:fu .3s ease both;}
-.page.active{display:flex;}
-@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.cnt { flex:1; padding:11px 12px 24px; display:flex; flex-direction:column; gap:12px; }
+
+/* Pages */
+.pg { display:none; flex-direction:column; gap:12px; }
+.pg.on { display:flex; }
 
 /* Card */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;}
-.ct{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;font-family:'Tajawal',sans-serif;}
-.ct::before{content:'';width:3px;height:11px;background:var(--accent);border-radius:2px;flex-shrink:0;}
+.card { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:14px; }
+.ct { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; display:flex; align-items:center; gap:6px; font-family:'Tajawal',sans-serif; }
+.ct::before { content:''; width:3px; height:11px; background:var(--accent); border-radius:2px; }
 
 /* Fields */
-.field{margin-bottom:11px;}
-.field:last-child{margin-bottom:0;}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px;}
-.frow:last-child{margin-bottom:0;}
-label{display:flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;font-family:'Tajawal',sans-serif;flex-wrap:wrap;line-height:1.4;}
-.req{color:var(--danger);font-size:12px;line-height:1;}
-.sub{font-size:9px;color:#484f58;font-weight:400;direction:ltr;}
-input,textarea,select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:9px 11px;color:var(--text);font-family:'Cairo',sans-serif;font-size:13px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;}
-input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow);background:var(--surface2);}
-input.err,textarea.err,select.err{border-color:var(--danger);box-shadow:0 0 0 3px var(--dbg);}
-input::placeholder,textarea::placeholder{color:#484f58;}
-input[type="date"]{color-scheme:dark;}
-input[type="email"]{direction:ltr;text-align:right;}
-input[type="number"]{direction:ltr;text-align:right;}
-textarea{resize:none;line-height:1.6;}
-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%238b949e' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 11px center;padding-left:28px;}
-select option{background:var(--surface2);}
-.cc{text-align:left;font-size:10px;color:var(--muted);margin-top:3px;font-family:'Tajawal',sans-serif;}
-.iw{position:relative;}
-.iw input{padding-left:34px;}
-.isuf{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:11px;pointer-events:none;font-family:'Tajawal',sans-serif;}
+.f { margin-bottom:11px; }
+.f:last-child { margin-bottom:0; }
+.fr { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:11px; }
+.fr:last-child { margin-bottom:0; }
+label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; font-family:'Tajawal',sans-serif; }
+label span.r { color:var(--danger); }
+label span.s { font-size:9px; color:#484f58; font-weight:400; direction:ltr; }
+input, textarea, select { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:7px; padding:9px 11px; color:var(--text); font-family:'Cairo',sans-serif; font-size:13px; outline:none; -webkit-appearance:none; appearance:none; transition:border-color .2s; }
+input:focus, textarea:focus, select:focus { border-color:var(--accent); background:var(--surface2); }
+input::placeholder, textarea::placeholder { color:#484f58; }
+input[type="date"] { color-scheme:dark; }
+input[type="number"] { direction:ltr; text-align:right; }
+textarea { resize:none; line-height:1.6; }
+select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%238b949e' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:left 10px center; padding-left:26px; cursor:pointer; }
+select option { background:var(--surface2); }
+.iw { position:relative; }
+.iw input { padding-left:32px; }
+.isuf { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:11px; pointer-events:none; }
 
 /* Toggle */
-.trow{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
-.ti{display:flex;flex-direction:column;gap:2px;}
-.tlabel{font-size:13px;font-weight:600;}
-.tsub{font-size:9px;color:var(--muted);font-family:'Tajawal',sans-serif;}
-.toggle{position:relative;width:42px;height:23px;flex-shrink:0;}
-.toggle input{opacity:0;width:0;height:0;}
-.slider{position:absolute;inset:0;cursor:pointer;background:var(--border);border-radius:23px;transition:background .3s;}
-.slider::before{content:'';position:absolute;width:17px;height:17px;border-radius:50%;background:#fff;left:3px;top:3px;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.4);}
-.toggle input:checked+.slider{background:var(--accent);}
-.toggle input:checked+.slider::before{transform:translateX(19px);}
+.trow { display:flex; align-items:center; justify-content:space-between; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+.tlbl { font-size:13px; font-weight:600; }
+.tsub { font-size:9px; color:var(--muted); font-family:'Tajawal',sans-serif; }
+.tgl { position:relative; width:42px; height:23px; flex-shrink:0; }
+.tgl input { opacity:0; width:0; height:0; }
+.sldr { position:absolute; inset:0; cursor:pointer; background:var(--border); border-radius:23px; transition:background .25s; }
+.sldr::before { content:''; position:absolute; width:17px; height:17px; border-radius:50%; background:#fff; left:3px; top:3px; transition:transform .25s; }
+.tgl input:checked + .sldr { background:var(--accent); }
+.tgl input:checked + .sldr::before { transform:translateX(19px); }
 
-/* Rent row */
-.rent-extra{display:none;margin-top:10px;}
-.rent-extra.show{display:block;}
+/* Rent */
+.rent { display:none; margin-top:10px; }
+.rent.on { display:block; }
+
+/* Saved banner */
+.saved-banner { display:none; align-items:center; justify-content:space-between; background:rgba(46,164,79,.08); border:1px solid rgba(46,164,79,.2); border-radius:8px; padding:8px 12px; margin-bottom:11px; }
+.saved-banner.on { display:flex; }
+.saved-txt { font-size:10px; color:var(--accent2); font-family:'Tajawal',sans-serif; }
+.saved-clr { background:transparent; border:1px solid #484f58; border-radius:5px; padding:3px 8px; color:var(--muted); font-size:10px; font-family:'Tajawal',sans-serif; cursor:pointer; }
 
 /* Nav */
-.nav{display:flex;gap:8px;margin-top:4px;}
-.btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
-.bn{background:linear-gradient(135deg,var(--accent),#1a7f37);color:#fff;box-shadow:0 4px 14px var(--glow);}
-.bn:active{transform:scale(.97);}
-.bb{background:var(--surface);color:var(--muted);border:1px solid var(--border);flex:0 0 auto;padding:13px 15px;}
-.bb:active{background:var(--surface2);}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;}
-.spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Preview */
-.psec{font-size:9px;font-weight:700;color:var(--accent2);font-family:'Tajawal',sans-serif;padding:9px 0 3px;border-bottom:1px solid rgba(46,164,79,.2);margin-bottom:2px;letter-spacing:.4px;text-transform:uppercase;}
-.prow{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(48,54,61,.7);gap:8px;}
-.prow:last-child{border-bottom:none;padding-bottom:0;}
-.pk{font-size:10px;color:var(--muted);font-family:'Tajawal',sans-serif;flex-shrink:0;max-width:44%;line-height:1.4;}
-.pv{font-size:11px;font-weight:600;text-align:left;word-break:break-word;max-width:54%;line-height:1.5;}
-.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Tajawal',sans-serif;}
-.bg{background:rgba(46,164,79,.15);color:var(--accent2);border:1px solid rgba(46,164,79,.3);}
-.br{background:rgba(248,81,73,.12);color:var(--danger);border:1px solid rgba(248,81,73,.3);}
-.by{background:rgba(210,153,34,.15);color:var(--yellow);border:1px solid rgba(210,153,34,.3);}
-.bb2{background:rgba(56,139,253,.12);color:var(--blue);border:1px solid rgba(56,139,253,.3);}
+.nav { display:flex; gap:8px; }
+.btn { flex:1; padding:13px; border:none; border-radius:10px; font-size:14px; font-weight:700; font-family:'Cairo',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; }
+.btn-n { background:linear-gradient(135deg,var(--accent),#1a7f37); color:#fff; box-shadow:0 4px 14px var(--glow); }
+.btn-b { background:var(--surface); color:var(--muted); border:1px solid var(--border); flex:0 0 auto; padding:13px 15px; }
 
 /* Dest */
-.dest{display:flex;align-items:center;gap:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
-.dico{width:31px;height:31px;background:rgba(46,164,79,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
-.dlbl{font-size:10px;color:var(--muted);font-family:'Tajawal',sans-serif;}
-.demail{font-size:11px;color:var(--accent2);font-weight:700;direction:ltr;font-family:'Tajawal',sans-serif;}
+.dest { display:flex; align-items:center; gap:9px; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+.dico { width:30px; height:30px; background:rgba(46,164,79,.15); border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.dlbl { font-size:10px; color:var(--muted); font-family:'Tajawal',sans-serif; }
+.deml { font-size:11px; color:var(--accent2); font-weight:700; direction:ltr; }
+
+/* Preview */
+.psec { font-size:9px; font-weight:700; color:var(--accent2); font-family:'Tajawal',sans-serif; padding:8px 0 3px; border-bottom:1px solid rgba(46,164,79,.2); margin-bottom:2px; text-transform:uppercase; letter-spacing:.4px; }
+.prow { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(48,54,61,.6); gap:8px; }
+.prow:last-child { border-bottom:none; }
+.pk { font-size:10px; color:var(--muted); font-family:'Tajawal',sans-serif; flex-shrink:0; max-width:44%; }
+.pv { font-size:11px; font-weight:600; text-align:left; word-break:break-word; max-width:54%; }
+.bg { display:inline-block; padding:1px 7px; border-radius:20px; font-size:10px; font-weight:700; font-family:'Tajawal',sans-serif; background:rgba(46,164,79,.15); color:var(--accent2); border:1px solid rgba(46,164,79,.3); }
+.br { display:inline-block; padding:1px 7px; border-radius:20px; font-size:10px; font-weight:700; font-family:'Tajawal',sans-serif; background:rgba(248,81,73,.12); color:var(--danger); border:1px solid rgba(248,81,73,.3); }
+
+/* Spinner */
+.spin { width:17px; height:17px; border:2px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:sp .7s linear infinite; }
+@keyframes sp { to { transform:rotate(360deg); } }
 
 /* Success */
-.spage{display:none;flex-direction:column;align-items:center;justify-content:center;padding:50px 22px;text-align:center;animation:fu .4s ease;}
-.spage.active{display:flex;}
-.sring{width:76px;height:76px;background:rgba(46,164,79,.12);border:2px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:18px;box-shadow:0 0 32px var(--glow);animation:pop .5s cubic-bezier(.34,1.56,.64,1);}
-@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
-.stitle{font-size:21px;font-weight:900;margin-bottom:7px;}
-.ssub{font-size:13px;color:var(--muted);font-family:'Tajawal',sans-serif;line-height:1.7;margin-bottom:26px;}
-.bnew{padding:11px 26px;background:transparent;border:1px solid var(--accent);border-radius:9px;color:var(--accent2);font-size:13px;font-weight:600;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .2s;}
-.bnew:active{background:rgba(46,164,79,.1);transform:scale(.97);}
+.spage { display:none; flex-direction:column; align-items:center; justify-content:center; padding:50px 22px; text-align:center; }
+.spage.on { display:flex; }
+.sring { width:76px; height:76px; background:rgba(46,164,79,.12); border:2px solid var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:34px; margin-bottom:18px; }
+.stit { font-size:21px; font-weight:900; margin-bottom:7px; }
+.ssub { font-size:13px; color:var(--muted); font-family:'Tajawal',sans-serif; line-height:1.7; margin-bottom:26px; }
+.btn-new { padding:11px 26px; background:transparent; border:1px solid var(--accent); border-radius:9px; color:var(--accent2); font-size:13px; font-weight:600; font-family:'Cairo',sans-serif; cursor:pointer; }
 
 /* Toast */
-.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-110px);background:var(--surface);border:1px solid rgba(248,81,73,.4);border-radius:10px;padding:10px 15px;display:flex;align-items:center;gap:8px;font-size:12px;font-family:'Cairo',sans-serif;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.45);z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);min-width:240px;max-width:92vw;}
-.toast.show{transform:translateX(-50%) translateY(0);}
+.toast { position:fixed; top:12px; left:50%; transform:translateX(-50%) translateY(-110px); background:var(--surface); border:1px solid rgba(248,81,73,.4); border-radius:10px; padding:10px 15px; display:flex; align-items:center; gap:8px; font-size:12px; font-family:'Cairo',sans-serif; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.45); z-index:9999; transition:transform .3s; min-width:240px; max-width:92vw; }
+.toast.on { transform:translateX(-50%) translateY(0); }
 
-.footer{text-align:center;padding:12px;font-size:10px;color:#484f58;font-family:'Tajawal',sans-serif;border-top:1px solid var(--border);}
+.footer { text-align:center; padding:12px; font-size:10px; color:#484f58; font-family:'Tajawal',sans-serif; border-top:1px solid var(--border); }
 </style>
 </head>
 <body>
 <div class="app">
 
 <!-- Header -->
-<div class="header">
-  <div class="header-top">
+<div class="hdr">
+  <div class="hdr-top">
     <div class="logo">📋</div>
-    <div class="header-text">
+    <div>
       <h1>متابعة FDP</h1>
       <p>نظام إرسال التقارير · Report System</p>
     </div>
   </div>
-  <div class="status-pill"><div class="dot"></div>جاهز للإرسال · Ready</div>
+  <div class="pill"><div class="dot"></div>جاهز للإرسال · Ready</div>
 </div>
 
-<!-- Stepbar -->
-<div class="stepbar" id="stepbar">
-  <div class="step active" id="s1"><div class="sc">1</div><div class="sl">المرشد</div></div>
-  <div class="con" id="c1"></div>
-  <div class="step" id="s2"><div class="sc">2</div><div class="sl">المشروع</div></div>
-  <div class="con" id="c2"></div>
-  <div class="step" id="s3"><div class="sc">3</div><div class="sl">الأداء</div></div>
-  <div class="con" id="c3"></div>
-  <div class="step" id="s4"><div class="sc">4</div><div class="sl">التقييم</div></div>
-  <div class="con" id="c4"></div>
-  <div class="step" id="s5"><div class="sc">5</div><div class="sl">مراجعة</div></div>
+<!-- Steps -->
+<div class="steps" id="steps">
+  <div class="st on" id="s1"><div class="sc">1</div><div class="sl">المرشد</div></div>
+  <div class="ln" id="l1"></div>
+  <div class="st" id="s2"><div class="sc">2</div><div class="sl">المشروع</div></div>
+  <div class="ln" id="l2"></div>
+  <div class="st" id="s3"><div class="sc">3</div><div class="sl">الأداء</div></div>
+  <div class="ln" id="l3"></div>
+  <div class="st" id="s4"><div class="sc">4</div><div class="sl">التقييم</div></div>
+  <div class="ln" id="l4"></div>
+  <div class="st" id="s5"><div class="sc">5</div><div class="sl">مراجعة</div></div>
 </div>
 
-<div class="content">
+<!-- Content -->
+<div class="cnt">
 
-<!-- PAGE 1: المرشد -->
-<div class="page active" id="page1">
+<!-- PAGE 1 -->
+<div class="pg on" id="pg1">
   <div class="card">
     <div class="ct">معلومات المرشد · Advisor Info</div>
-    <div class="field">
-      <label>اسم المرشد <span class="req">*</span> <span class="sub">Advisor Name</span></label>
+
+    <div class="saved-banner" id="savedBanner">
+      <div>
+        <div class="saved-txt">💾 بياناتك محفوظة · Info Saved</div>
+        <div style="font-size:9px;color:#8b949e;font-family:'Tajawal',sans-serif;">ستظهر تلقائياً في المرة القادمة</div>
+      </div>
+      <button class="saved-clr" onclick="clearSaved()">مسح · Clear</button>
+    </div>
+
+    <div class="f">
+      <label>اسم المرشد <span class="r">*</span> <span class="s">Advisor Name</span></label>
       <input type="text" id="advisorName" placeholder="أدخل اسمك الكامل">
     </div>
-    <div class="field">
-      <label>البريد الإلكتروني <span class="req">*</span> <span class="sub">Email</span></label>
-      <input type="email" id="advisorEmail" placeholder="example@gmail.com" inputmode="email">
-    </div>
-    <div class="frow">
+    <div class="fr">
       <div>
-        <label>تاريخ التقرير <span class="req">*</span> <span class="sub">Date</span></label>
+        <label>تاريخ التقرير <span class="r">*</span> <span class="s">Date</span></label>
         <input type="date" id="reportDate">
       </div>
       <div>
-        <label>آخر لقاء <span class="sub">Last Meeting</span></label>
+        <label>آخر لقاء <span class="s">Last Meeting</span></label>
         <input type="date" id="lastMeeting">
       </div>
     </div>
-    <div class="field">
-      <label>موعد المتابعة القادمة <span class="sub">Next Follow-up</span></label>
+    <div class="f">
+      <label>موعد المتابعة القادمة <span class="s">Next Follow-up</span></label>
       <input type="date" id="nextFollowup">
     </div>
   </div>
   <div class="nav">
-    <button class="btn bn" onclick="goTo(2)">التالي ←</button>
+    <button class="btn btn-n" onclick="next(1)">التالي ←</button>
   </div>
 </div>
 
-<!-- PAGE 2: المشروع -->
-<div class="page" id="page2">
+<!-- PAGE 2 -->
+<div class="pg" id="pg2">
   <div class="card">
     <div class="ct">معلومات المشروع · Project Info</div>
-    <div class="frow">
+    <div class="fr">
       <div>
-        <label>كود العائلة <span class="req">*</span> <span class="sub">Family Code</span></label>
+        <label>كود العائلة <span class="r">*</span> <span class="s">Family Code</span></label>
         <input type="text" id="familyCode" placeholder="F-001">
       </div>
       <div>
-        <label>اسم المستفيد <span class="req">*</span> <span class="sub">Beneficiary</span></label>
+        <label>اسم المستفيد <span class="r">*</span> <span class="s">Beneficiary</span></label>
         <input type="text" id="beneficiary" placeholder="الاسم الكامل">
       </div>
     </div>
-    <div class="field">
-      <label>اسم المشروع <span class="req">*</span> <span class="sub">Project Name</span></label>
+    <div class="f">
+      <label>اسم المشروع <span class="r">*</span> <span class="s">Project Name</span></label>
       <input type="text" id="projectName" placeholder="أدخل اسم المشروع">
     </div>
-    <div class="frow">
+    <div class="fr">
       <div>
-        <label>نوع المشروع <span class="req">*</span> <span class="sub">Project Type</span></label>
+        <label>نوع المشروع <span class="r">*</span> <span class="s">Type</span></label>
         <input type="text" id="projectType" placeholder="تجاري، زراعي...">
       </div>
       <div>
-        <label>المنطقة / المدينة <span class="req">*</span> <span class="sub">City / Region</span></label>
+        <label>المنطقة / المدينة <span class="r">*</span> <span class="s">City</span></label>
         <input type="text" id="projectCity" placeholder="اسم المدينة">
       </div>
     </div>
-    <div class="frow">
+    <div class="fr">
       <div>
-        <label>مبلغ التمويل <span class="req">*</span> <span class="sub">Funding Amount</span></label>
+        <label>مبلغ التمويل <span class="r">*</span> <span class="s">Funding</span></label>
         <div class="iw"><input type="number" id="fundingAmount" placeholder="0" min="0"><span class="isuf">$</span></div>
       </div>
       <div>
-        <label>رأس المال الحالي <span class="sub">Current Capital</span></label>
+        <label>رأس المال الحالي <span class="s">Capital</span></label>
         <div class="iw"><input type="number" id="currentCapital" placeholder="0" min="0"><span class="isuf">$</span></div>
       </div>
     </div>
-    <div class="frow">
+    <div class="fr">
       <div>
-        <label>أفراد الأسرة <span class="sub">Family Members</span></label>
+        <label>أفراد الأسرة <span class="s">Family</span></label>
         <input type="number" id="familyMembers" placeholder="0" min="0">
       </div>
       <div>
-        <label>عدد الموظفين <span class="sub">Employees</span></label>
+        <label>عدد الموظفين <span class="s">Employees</span></label>
         <input type="number" id="empCount" placeholder="0" min="0">
       </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="ct">حالة المشروع · Project Status</div>
-    <div class="field">
-      <label>قبل التمويل <span class="req">*</span> <span class="sub">Before Funding</span></label>
+    <div class="ct">حالة المشروع · Status</div>
+    <div class="f">
+      <label>قبل التمويل <span class="r">*</span> <span class="s">Before Funding</span></label>
       <select id="statusBefore">
         <option value="">-- اختر / Select --</option>
-        <option>🆕 مشروع جديد / New Project</option>
-        <option>✅ مشروع قائم / Existing Project</option>
-        <option>⏸️ متوقف - أصول بلا دخل / Paused - Assets No Income</option>
+        <option value="مشروع جديد / New Project">🆕 مشروع جديد / New Project</option>
+        <option value="مشروع قائم / Existing Project">✅ مشروع قائم / Existing Project</option>
+        <option value="متوقف - أصول بلا دخل / Paused">⏸️ متوقف - أصول بلا دخل / Paused</option>
       </select>
     </div>
-    <div class="field">
-      <label>حالياً وقت الزيارة <span class="req">*</span> <span class="sub">Current Status at Visit</span></label>
+    <div class="f">
+      <label>حالياً وقت الزيارة <span class="r">*</span> <span class="s">Current Status</span></label>
       <select id="statusNow">
         <option value="">-- اختر / Select --</option>
-        <option>💚 مستمر - دخل جيد / Active - Good Income</option>
-        <option>🟡 مستمر - دخل متوسط / Active - Average Income</option>
-        <option>🟠 مستمر - دخل ضعيف / Active - Low Income</option>
-        <option>⚠️ متعثر / Struggling</option>
-        <option>🔴 في طريقه للتوقف / Near Closure</option>
+        <option value="مستمر - دخل جيد / Active Good Income">💚 مستمر - دخل جيد / Active - Good Income</option>
+        <option value="مستمر - دخل متوسط / Active Average Income">🟡 مستمر - دخل متوسط / Active - Average Income</option>
+        <option value="مستمر - دخل ضعيف / Active Low Income">🟠 مستمر - دخل ضعيف / Active - Low Income</option>
+        <option value="متعثر / Struggling">⚠️ متعثر / Struggling</option>
+        <option value="في طريقه للتوقف / Near Closure">🔴 في طريقه للتوقف / Near Closure</option>
       </select>
     </div>
   </div>
 
   <div class="card">
-    <div class="ct">ملكية المكان · Premises Ownership</div>
-    <div class="field">
-      <label>حالة الملكية <span class="req">*</span> <span class="sub">Ownership Status</span></label>
+    <div class="ct">ملكية المكان · Ownership</div>
+    <div class="f">
+      <label>حالة الملكية <span class="r">*</span> <span class="s">Status</span></label>
       <select id="ownership" onchange="toggleRent()">
         <option value="">-- اختر / Select --</option>
-        <option value="own">🏠 ملك / Owned</option>
-        <option value="rent">🔑 إيجار / Rented</option>
-        <option value="free">🤝 غير مملوك بلا إيجار / Used Without Payment</option>
+        <option value="ملك / Owned">🏠 ملك / Owned</option>
+        <option value="إيجار / Rented">🔑 إيجار / Rented</option>
+        <option value="غير مملوك بلا إيجار / Used Free">🤝 غير مملوك بلا إيجار / Used Free</option>
       </select>
-      <div class="rent-extra" id="rentExtra">
-        <label style="margin-top:10px;">قيمة الإيجار الشهري <span class="sub">Monthly Rent</span></label>
+      <div class="rent" id="rentDiv">
+        <label style="margin-top:10px;">قيمة الإيجار الشهري <span class="s">Monthly Rent</span></label>
         <div class="iw"><input type="number" id="rentValue" placeholder="0" min="0"><span class="isuf">$</span></div>
       </div>
     </div>
   </div>
 
   <div class="nav">
-    <button class="btn bb" onclick="goTo(1)">→</button>
-    <button class="btn bn" onclick="goTo(3)">التالي ←</button>
+    <button class="btn btn-b" onclick="prev(2)">→</button>
+    <button class="btn btn-n" onclick="next(2)">التالي ←</button>
   </div>
 </div>
 
-<!-- PAGE 3: الأداء -->
-<div class="page" id="page3">
+<!-- PAGE 3 -->
+<div class="pg" id="pg3">
   <div class="card">
-    <div class="ct">مؤشرات الأداء · Performance Indicators</div>
-    <div class="frow">
+    <div class="ct">مؤشرات الأداء · Performance</div>
+    <div class="fr">
       <div>
-        <label>الدخل الشهري <span class="sub">Monthly Income</span></label>
+        <label>الدخل الشهري <span class="s">Income</span></label>
         <div class="iw"><input type="number" id="monthlyIncome" placeholder="0" min="0"><span class="isuf">$</span></div>
       </div>
       <div>
-        <label>نسبة تحقيق الأهداف <span class="sub">Goal Achievement</span></label>
+        <label>نسبة الأهداف <span class="s">Goals %</span></label>
         <div class="iw"><input type="number" id="goalPct" placeholder="0" min="0" max="100"><span class="isuf">%</span></div>
       </div>
     </div>
-    <div class="field">
-      <label style="margin-bottom:8px;">هل المشروع يسير وفق الخطة؟ <span class="sub">Is the project on track?</span></label>
+    <div class="f">
+      <label style="margin-bottom:8px;">هل المشروع وفق الخطة؟ <span class="s">On Track?</span></label>
       <div class="trow">
-        <div class="ti">
-          <div class="tlabel" id="trackLabel">لا / No</div>
+        <div>
+          <div class="tlbl" id="trackLbl">لا / No</div>
           <div class="tsub">اضغط للتبديل · Tap to toggle</div>
         </div>
-        <label class="toggle"><input type="checkbox" id="onTrack" onchange="updateTrack()"><span class="slider"></span></label>
+        <label class="tgl"><input type="checkbox" id="onTrack" onchange="updTrack()"><span class="sldr"></span></label>
       </div>
     </div>
   </div>
 
   <div class="card">
     <div class="ct">السداد · Repayment</div>
-    <div class="frow">
+    <div class="fr">
       <div>
-        <label>دفعات منجزة <span class="sub">Completed Payments</span></label>
-        <input type="number" id="paidInstallments" placeholder="0" min="0">
+        <label>دفعات منجزة <span class="s">Paid</span></label>
+        <input type="number" id="paidInst" placeholder="0" min="0">
       </div>
       <div>
-        <label>دفعات متبقية <span class="sub">Remaining Payments</span></label>
-        <input type="number" id="remainInstallments" placeholder="0" min="0">
+        <label>دفعات متبقية <span class="s">Remaining</span></label>
+        <input type="number" id="remInst" placeholder="0" min="0">
       </div>
     </div>
-    <div class="field">
-      <label>التزام المستفيد بالسداد <span class="req">*</span> <span class="sub">Repayment Commitment</span></label>
+    <div class="f">
+      <label>الالتزام بالسداد <span class="r">*</span> <span class="s">Commitment</span></label>
       <select id="repayStatus">
         <option value="">-- اختر / Select --</option>
-        <option>✅ ملتزم / Committed</option>
-        <option>⚠️ متأخر أحياناً / Occasionally Late</option>
-        <option>❌ متأخر بشكل متكرر / Frequently Late</option>
+        <option value="ملتزم / Committed">✅ ملتزم / Committed</option>
+        <option value="متأخر أحياناً / Occasionally Late">⚠️ متأخر أحياناً / Occasionally Late</option>
+        <option value="متأخر بشكل متكرر / Frequently Late">❌ متأخر بشكل متكرر / Frequently Late</option>
       </select>
     </div>
   </div>
 
   <div class="nav">
-    <button class="btn bb" onclick="goTo(2)">→</button>
-    <button class="btn bn" onclick="goTo(4)">التالي ←</button>
+    <button class="btn btn-b" onclick="prev(3)">→</button>
+    <button class="btn btn-n" onclick="next(3)">التالي ←</button>
   </div>
 </div>
 
-<!-- PAGE 4: التقييم -->
-<div class="page" id="page4">
+<!-- PAGE 4 -->
+<div class="pg" id="pg4">
   <div class="card">
-    <div class="ct">التحديات والدعم · Challenges & Support</div>
-    <div class="field">
-      <label>التحديات التي يواجهها المشروع <span class="sub">Project Challenges</span></label>
-      <textarea id="challenges" rows="3" placeholder="اذكر التحديات الرئيسية..." oninput="cc1()"></textarea>
-      <div class="cc"><span id="cc1">0</span> حرف</div>
+    <div class="ct">التحديات والدعم · Challenges</div>
+    <div class="f">
+      <label>التحديات <span class="s">Challenges</span></label>
+      <textarea id="challenges" rows="3" placeholder="اذكر التحديات الرئيسية..."></textarea>
     </div>
-    <div class="field">
-      <label>هل يحتاج دعماً إضافياً؟ <span class="sub">Additional Support Needed?</span></label>
+    <div class="f">
+      <label>الدعم المطلوب <span class="s">Support Needed</span></label>
       <select id="supportNeeded">
         <option value="">-- اختر / Select --</option>
-        <option>💰 دعم مالي / Financial Support</option>
-        <option>🎓 دعم استشاري / Advisory Support</option>
-        <option>💰🎓 دعم مالي واستشاري / Financial & Advisory</option>
-        <option>✅ لا يحتاج دعماً إضافياً / No Additional Support Needed</option>
+        <option value="دعم مالي / Financial Support">💰 دعم مالي / Financial Support</option>
+        <option value="دعم استشاري / Advisory Support">🎓 دعم استشاري / Advisory Support</option>
+        <option value="دعم مالي واستشاري / Financial and Advisory">💰🎓 دعم مالي واستشاري / Financial & Advisory</option>
+        <option value="لا يحتاج دعماً إضافياً / No Support Needed">✅ لا يحتاج دعماً إضافياً / No Support Needed</option>
       </select>
     </div>
   </div>
 
   <div class="card">
-    <div class="ct">توصية المرشد · Advisor Recommendation</div>
-    <div class="field">
-      <label>التوصية <span class="req">*</span> <span class="sub">Recommendation</span></label>
+    <div class="ct">توصية المرشد · Recommendation</div>
+    <div class="f">
+      <label>التوصية <span class="r">*</span> <span class="s">Recommendation</span></label>
       <select id="recommendation">
         <option value="">-- اختر / Select --</option>
-        <option>✅ متابعة عادية / Regular Follow-up</option>
-        <option>⚠️ يحتاج متابعة مكثفة / Needs Intensive Follow-up</option>
-        <option>💰 يُنصح بتمويل إضافي / Additional Funding Recommended</option>
-        <option>🎓 يحتاج دعم استشاري / Needs Advisory Support</option>
-        <option>💰🎓 يحتاج تمويل إضافي + دعم استشاري / Funding & Advisory Needed</option>
-        <option>🚨 الحالة تستدعي تدخلاً عاجلاً / Urgent Intervention Required</option>
+        <option value="متابعة عادية / Regular Follow-up">✅ متابعة عادية / Regular Follow-up</option>
+        <option value="يحتاج متابعة مكثفة / Intensive Follow-up">⚠️ يحتاج متابعة مكثفة / Intensive Follow-up</option>
+        <option value="يُنصح بتمويل إضافي / Additional Funding">💰 يُنصح بتمويل إضافي / Additional Funding</option>
+        <option value="يحتاج دعم استشاري / Advisory Support">🎓 يحتاج دعم استشاري / Advisory Support</option>
+        <option value="يحتاج تمويل إضافي ودعم استشاري / Funding and Advisory">💰🎓 يحتاج تمويل + دعم استشاري / Funding & Advisory</option>
+        <option value="الحالة تستدعي تدخلاً عاجلاً / Urgent Intervention">🚨 الحالة تستدعي تدخلاً عاجلاً / Urgent</option>
       </select>
     </div>
-    <div class="field">
-      <label>ملاحظات إضافية <span class="sub">Additional Notes</span></label>
-      <textarea id="extraNotes" rows="3" placeholder="أي ملاحظات إضافية..." oninput="cc2()"></textarea>
-      <div class="cc"><span id="cc2">0</span> حرف</div>
+    <div class="f">
+      <label>ملاحظات إضافية <span class="s">Notes</span></label>
+      <textarea id="extraNotes" rows="3" placeholder="أي ملاحظات إضافية..."></textarea>
     </div>
   </div>
 
   <div class="nav">
-    <button class="btn bb" onclick="goTo(3)">→</button>
-    <button class="btn bn" onclick="goTo(5)">مراجعة ←</button>
+    <button class="btn btn-b" onclick="prev(4)">→</button>
+    <button class="btn btn-n" onclick="next(4)">مراجعة ←</button>
   </div>
 </div>
 
-<!-- PAGE 5: مراجعة -->
-<div class="page" id="page5">
+<!-- PAGE 5 -->
+<div class="pg" id="pg5">
   <div class="card">
-    <div class="ct">ملخص التقرير · Report Summary</div>
-    <div id="previewContent"></div>
+    <div class="ct">ملخص التقرير · Summary</div>
+    <div id="preview"></div>
   </div>
   <div class="card">
     <div class="ct">وجهة الإرسال · Destination</div>
@@ -412,320 +412,247 @@ select option{background:var(--surface2);}
       <div class="dico">✉️</div>
       <div>
         <div class="dlbl">سيُرسل إلى · Will be sent to</div>
-        <div class="demail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abcac7c285c6c4c3cac6c6cacf9b9b85caebccc6cac2c785c8c4c6">[email&#160;protected]</a></div>
+        <div class="deml">ali.mohammad00.a@gmail.com</div>
       </div>
     </div>
   </div>
   <div class="nav">
-    <button class="btn bb" onclick="goTo(4)">→</button>
-    <button class="btn bn" id="sendBtn" onclick="sendReport()">
+    <button class="btn btn-b" onclick="prev(5)">→</button>
+    <button class="btn btn-n" id="sendBtn" onclick="sendReport()">
       <span>📤</span><span>إرسال التقرير</span>
     </button>
   </div>
 </div>
 
 <!-- SUCCESS -->
-<div class="spage" id="successPage">
+<div class="spage" id="spage">
   <div class="sring">✓</div>
-  <div class="stitle">تم الإرسال! 🎉</div>
-  <div class="ssub">تم تجهيز التقرير وفتح تطبيق البريد الإلكتروني<br>Tap Send in your mail app to deliver the report</div>
-  <button class="bnew" onclick="resetAll()">+ تقرير جديد · New Report</button>
+  <div class="stit">تم الإرسال! 🎉</div>
+  <div class="ssub">تم تجهيز التقرير وفتح تطبيق البريد الإلكتروني<br>Tap Send in your mail app</div>
+  <button class="btn-new" onclick="resetAll()">+ تقرير جديد · New Report</button>
 </div>
 
-</div><!-- content -->
-<div class="footer">متابعة FDP · v3.0 · Android & iOS</div>
+</div><!-- cnt -->
+<div class="footer">متابعة FDP · v4.0</div>
 </div><!-- app -->
 
-<!-- Toast -->
-<div class="toast" id="toast"><span id="ticon"></span><span id="tmsg"></span></div>
+<div class="toast" id="toast"><span id="ticon">⚠️</span> <span id="tmsg"></span></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const TODAY = new Date().toISOString().split('T')[0];
+<script>
+var cur = 1;
+var TODAY = new Date().toISOString().split('T')[0];
 document.getElementById('reportDate').value = TODAY;
-let cur = 1;
 
-// ── Remember Advisor ──
-function loadAdvisor(){
-  const name  = localStorage.getItem('fdp_advisor_name');
-  const email = localStorage.getItem('fdp_advisor_email');
-  if(name)  document.getElementById('advisorName').value  = name;
-  if(email) document.getElementById('advisorEmail').value = email;
-  if(name || email) showSavedBanner();
+// Load saved advisor
+var sn = localStorage.getItem('fdp_name');
+if(sn) {
+  document.getElementById('advisorName').value = sn;
+  document.getElementById('savedBanner').classList.add('on');
 }
 
-function saveAdvisor(){
-  const name  = v('advisorName');
-  const email = v('advisorEmail');
-  if(name)  localStorage.setItem('fdp_advisor_name',  name);
-  if(email) localStorage.setItem('fdp_advisor_email', email);
+function g(id) { return document.getElementById(id).value.trim(); }
+
+function toast(msg) {
+  document.getElementById('tmsg').textContent = msg;
+  var t = document.getElementById('toast');
+  t.classList.add('on');
+  setTimeout(function(){ t.classList.remove('on'); }, 3000);
 }
 
-function showSavedBanner(){
-  const banner = document.getElementById('savedBanner');
-  if(banner) banner.style.display = 'flex';
+function next(p) {
+  if(p === 1) {
+    if(!g('advisorName')) { toast('الرجاء إدخال اسم المرشد'); return; }
+    if(!g('reportDate'))  { toast('الرجاء اختيار تاريخ التقرير'); return; }
+    localStorage.setItem('fdp_name', g('advisorName'));
+  }
+  if(p === 2) {
+    if(!g('familyCode'))    { toast('الرجاء إدخال كود العائلة'); return; }
+    if(!g('beneficiary'))   { toast('الرجاء إدخال اسم المستفيد'); return; }
+    if(!g('projectName'))   { toast('الرجاء إدخال اسم المشروع'); return; }
+    if(!g('projectType'))   { toast('الرجاء إدخال نوع المشروع'); return; }
+    if(!g('projectCity'))   { toast('الرجاء إدخال المنطقة'); return; }
+    if(!g('fundingAmount')) { toast('الرجاء إدخال مبلغ التمويل'); return; }
+    if(!g('statusBefore'))  { toast('الرجاء اختيار حالة المشروع قبل التمويل'); return; }
+    if(!g('statusNow'))     { toast('الرجاء اختيار الحالة الحالية'); return; }
+    if(!g('ownership'))     { toast('الرجاء اختيار حالة الملكية'); return; }
+  }
+  if(p === 3) {
+    if(!g('repayStatus')) { toast('الرجاء اختيار حالة الالتزام بالسداد'); return; }
+  }
+  if(p === 4) {
+    if(!g('recommendation')) { toast('الرجاء اختيار توصية المرشد'); return; }
+    buildPreview();
+  }
+  showPage(p + 1);
 }
 
-function forgetAdvisor(){
-  localStorage.removeItem('fdp_advisor_name');
-  localStorage.removeItem('fdp_advisor_email');
-  document.getElementById('advisorName').value  = '';
-  document.getElementById('advisorEmail').value = '';
-  const banner = document.getElementById('savedBanner');
-  if(banner) banner.style.display = 'none';
-  showToast('تم مسح البيانات المحفوظة · Saved data cleared');
+function prev(p) { showPage(p - 1); }
+
+function showPage(n) {
+  document.getElementById('pg' + cur).classList.remove('on');
+  document.getElementById('s' + cur).classList.remove('on');
+  document.getElementById('s' + cur).classList.add('dn');
+  for(var i = 1; i <= 4; i++) {
+    document.getElementById('l' + i).classList.toggle('dn', i < n);
+  }
+  cur = n;
+  document.getElementById('pg' + n).classList.add('on');
+  document.getElementById('s' + n).classList.remove('dn');
+  document.getElementById('s' + n).classList.add('on');
+  window.scrollTo(0, 0);
 }
 
-loadAdvisor();
-
-// ── Navigation ──
-function goTo(n){
-  try {
-    if(n > cur && !validate(cur)) return;
-    var prev = cur;
-    document.getElementById('page'+prev).classList.remove('active');
-    document.getElementById('s'+prev).classList.remove('active');
-    if(n > prev) document.getElementById('s'+prev).classList.add('done');
-    else { document.getElementById('s'+prev).classList.remove('done'); document.getElementById('s'+n).classList.remove('done'); }
-    for(var i=1;i<=4;i++) document.getElementById('c'+i).classList.toggle('done', i < n);
-    cur = n;
-    document.getElementById('page'+n).classList.add('active');
-    document.getElementById('s'+n).classList.remove('done');
-    document.getElementById('s'+n).classList.add('active');
-    if(n===5) buildPreview();
-    window.scrollTo({top:0,behavior:'smooth'});
-  } catch(e) { alert('خطأ: ' + e.message); }
+function toggleRent() {
+  var val = document.getElementById('ownership').value;
+  document.getElementById('rentDiv').classList.toggle('on', val === 'إيجار / Rented');
 }
 
-// ── Validation ──
-function validate(p){
-  try {
-    if(p===1){
-      if(!v('advisorName'))  { showToast('الرجاء إدخال اسم المرشد'); return false; }
-      if(!v('advisorEmail')) { showToast('الرجاء إدخال البريد الإلكتروني'); return false; }
-      if(!v('reportDate'))   { showToast('الرجاء اختيار تاريخ التقرير'); return false; }
-      saveAdvisor();
-    }
-    if(p===2){
-      if(!v('familyCode'))    { showToast('الرجاء إدخال كود العائلة'); return false; }
-      if(!v('beneficiary'))   { showToast('الرجاء إدخال اسم المستفيد'); return false; }
-      if(!v('projectName'))   { showToast('الرجاء إدخال اسم المشروع'); return false; }
-      if(!v('projectType'))   { showToast('الرجاء إدخال نوع المشروع'); return false; }
-      if(!v('projectCity'))   { showToast('الرجاء إدخال المنطقة / المدينة'); return false; }
-      if(!v('fundingAmount')) { showToast('الرجاء إدخال مبلغ التمويل'); return false; }
-      if(!v('statusBefore'))  { showToast('الرجاء اختيار حالة المشروع قبل التمويل'); return false; }
-      if(!v('statusNow'))     { showToast('الرجاء اختيار الحالة الحالية للمشروع'); return false; }
-      if(!v('ownership'))     { showToast('الرجاء اختيار حالة ملكية المكان'); return false; }
-    }
-    if(p===3){
-      if(!v('repayStatus')) { showToast('الرجاء اختيار حالة الالتزام بالسداد'); return false; }
-    }
-    if(p===4){
-      if(!v('recommendation')) { showToast('الرجاء اختيار توصية المرشد'); return false; }
-    }
-    return true;
-  } catch(e) { return true; }
+function updTrack() {
+  var on = document.getElementById('onTrack').checked;
+  document.getElementById('trackLbl').textContent = on ? 'نعم / Yes' : 'لا / No';
 }
 
-function v(id){ return document.getElementById(id).value.trim(); }
-
-function fail(id, msg){
-  const el = document.getElementById(id);
-  el.classList.add('err'); el.focus();
-  setTimeout(()=>el.classList.remove('err'), 2000);
-  showToast(msg); return false;
+function clearSaved() {
+  localStorage.removeItem('fdp_name');
+  document.getElementById('advisorName').value = '';
+  document.getElementById('savedBanner').classList.remove('on');
 }
 
-// ── Helpers ──
-function toggleRent(){
-  const val = document.getElementById('ownership').value;
-  document.getElementById('rentExtra').classList.toggle('show', val==='rent');
-}
-
-function updateTrack(){
-  const on = document.getElementById('onTrack').checked;
-  document.getElementById('trackLabel').textContent = on ? 'نعم / Yes' : 'لا / No';
-}
-
-function cc1(){ document.getElementById('cc1').textContent = document.getElementById('challenges').value.length; }
-function cc2(){ document.getElementById('cc2').textContent = document.getElementById('extraNotes').value.length; }
-
-function fmtDate(d){
+function fd(d) {
   if(!d) return '—';
-  return new Date(d).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'});
+  return new Date(d).toLocaleDateString('ar-SA', {year:'numeric', month:'short', day:'numeric'});
 }
 
-function ownershipLabel(){
-  const val = document.getElementById('ownership').value;
-  if(val==='own') return '🏠 ملك / Owned';
-  if(val==='rent') return '🔑 إيجار / Rented';
-  if(val==='free') return '🤝 غير مملوك بلا إيجار / Used Without Payment';
-  return '—';
-}
-
-// ── Preview ──
-function buildPreview(){
-  const onTrack = document.getElementById('onTrack').checked;
-  const rentVal = v('rentValue');
-  const ownerStr = ownershipLabel() + (document.getElementById('ownership').value==='rent' && rentVal ? ` — ${rentVal} $` : '');
-
-  const sections = [
-    { title: 'معلومات المرشد · Advisor Info', rows:[
-      ['اسم المرشد / Advisor', v('advisorName')],
-      ['البريد / Email', v('advisorEmail')],
-      ['تاريخ التقرير / Date', fmtDate(v('reportDate'))],
-      ['آخر لقاء / Last Meeting', fmtDate(v('lastMeeting'))],
-      ['المتابعة القادمة / Next F-U', fmtDate(v('nextFollowup'))],
-    ]},
-    { title: 'معلومات المشروع · Project Info', rows:[
-      ['كود العائلة / Family Code', v('familyCode')],
-      ['اسم المستفيد / Beneficiary', v('beneficiary')],
-      ['اسم المشروع / Project Name', v('projectName')],
-      ['نوع المشروع / Type', v('projectType')],
-      ['المنطقة / City', v('projectCity')],
-      ['مبلغ التمويل / Funding', v('fundingAmount') ? v('fundingAmount')+' $' : '—'],
-      ['رأس المال الحالي / Capital', v('currentCapital') ? v('currentCapital')+' $' : '—'],
-      ['أفراد الأسرة / Family', v('familyMembers') || '—'],
-      ['الموظفين / Employees', v('empCount') || '—'],
-    ]},
-    { title: 'حالة المشروع · Project Status', rows:[
-      ['قبل التمويل / Before', v('statusBefore') || '—'],
-      ['حالياً / Current', v('statusNow') || '—'],
-      ['الملكية / Ownership', ownerStr],
-    ]},
-    { title: 'الأداء · Performance', rows:[
-      ['الدخل الشهري / Income', v('monthlyIncome') ? v('monthlyIncome')+' $' : '—'],
-      ['تحقيق الأهداف / Goals', v('goalPct') ? v('goalPct')+'%' : '—'],
-      ['وفق الخطة / On Track', onTrack ? '<span class="badge bg">نعم / Yes ✅</span>' : '<span class="badge br">لا / No ❌</span>'],
-      ['دفعات منجزة / Paid', v('paidInstallments') || '—'],
-      ['دفعات متبقية / Remaining', v('remainInstallments') || '—'],
-      ['الالتزام بالسداد / Repayment', v('repayStatus') || '—'],
-    ]},
-    { title: 'التقييم · Evaluation', rows:[
-      ['التحديات / Challenges', v('challenges') || '—'],
-      ['الدعم المطلوب / Support', v('supportNeeded') || '—'],
-      ['توصية المرشد / Recommendation', v('recommendation') || '—'],
-      ['ملاحظات / Notes', v('extraNotes') || '—'],
-    ]},
+function buildPreview() {
+  var onTrack = document.getElementById('onTrack').checked;
+  var rent = document.getElementById('ownership').value === 'إيجار / Rented' && g('rentValue') ? ' — ' + g('rentValue') + ' $' : '';
+  var rows = [
+    ['المرشد', 'معلومات المرشد · Advisor', null],
+    ['اسم المرشد / Name', g('advisorName'), null],
+    ['تاريخ التقرير / Date', fd(g('reportDate')), null],
+    ['آخر لقاء / Last Meeting', fd(g('lastMeeting')), null],
+    ['المتابعة القادمة / Next F-U', fd(g('nextFollowup')), null],
+    ['المشروع', 'معلومات المشروع · Project', null],
+    ['كود العائلة / Family Code', g('familyCode'), null],
+    ['اسم المستفيد / Beneficiary', g('beneficiary'), null],
+    ['اسم المشروع / Project', g('projectName'), null],
+    ['نوع المشروع / Type', g('projectType'), null],
+    ['المنطقة / City', g('projectCity'), null],
+    ['مبلغ التمويل / Funding', g('fundingAmount') ? g('fundingAmount') + ' $' : '—', null],
+    ['رأس المال / Capital', g('currentCapital') ? g('currentCapital') + ' $' : '—', null],
+    ['أفراد الأسرة / Family', g('familyMembers') || '—', null],
+    ['الموظفين / Employees', g('empCount') || '—', null],
+    ['الحالة', 'حالة المشروع · Status', null],
+    ['قبل التمويل / Before', g('statusBefore') || '—', null],
+    ['حالياً / Current', g('statusNow') || '—', null],
+    ['الملكية / Ownership', (g('ownership') || '—') + rent, null],
+    ['الأداء', 'الأداء · Performance', null],
+    ['الدخل / Income', g('monthlyIncome') ? g('monthlyIncome') + ' $' : '—', null],
+    ['تحقيق الأهداف / Goals', g('goalPct') ? g('goalPct') + '%' : '—', null],
+    ['وفق الخطة / On Track', onTrack ? '<span class="bg">نعم / Yes ✅</span>' : '<span class="br">لا / No ❌</span>', true],
+    ['دفعات منجزة / Paid', g('paidInst') || '—', null],
+    ['دفعات متبقية / Remaining', g('remInst') || '—', null],
+    ['الالتزام / Commitment', g('repayStatus') || '—', null],
+    ['التقييم', 'التقييم · Evaluation', null],
+    ['التحديات / Challenges', g('challenges') || '—', null],
+    ['الدعم / Support', g('supportNeeded') || '—', null],
+    ['التوصية / Recommendation', g('recommendation') || '—', null],
+    ['ملاحظات / Notes', g('extraNotes') || '—', null],
   ];
 
-  let html = '';
-  sections.forEach(sec=>{
-    html += `<div class="psec">${sec.title}</div>`;
-    sec.rows.forEach(([k,val])=>{
-      html += `<div class="prow"><div class="pk">${k}</div><div class="pv">${val}</div></div>`;
-    });
+  var html = '';
+  var sections = ['المرشد', 'المشروع', 'الحالة', 'الأداء', 'التقييم'];
+  rows.forEach(function(r) {
+    if(sections.indexOf(r[0]) !== -1) {
+      html += '<div class="psec">' + r[1] + '</div>';
+    } else {
+      html += '<div class="prow"><div class="pk">' + r[0] + '</div><div class="pv">' + r[1] + '</div></div>';
+    }
   });
-  document.getElementById('previewContent').innerHTML = html;
+  document.getElementById('preview').innerHTML = html;
 }
 
-// ── Send ──
-function sendReport(){
-  const onTrack = document.getElementById('onTrack').checked;
-  const btn = document.getElementById('sendBtn');
+function sendReport() {
+  var onTrack = document.getElementById('onTrack').checked;
+  var btn = document.getElementById('sendBtn');
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div><span>جارٍ التجهيز...</span>';
+  btn.innerHTML = '<div class="spin"></div><span>جارٍ التجهيز...</span>';
+  var rent = document.getElementById('ownership').value === 'إيجار / Rented' && g('rentValue') ? ' — ' + g('rentValue') + ' $' : '';
 
-  const rentVal = v('rentValue');
-  const ownerStr = ownershipLabel() + (document.getElementById('ownership').value==='rent' && rentVal ? ` — ${rentVal} $` : '');
+  var subject = encodeURIComponent('[متابعة FDP] ' + g('projectName') + ' — ' + g('beneficiary') + ' — ' + g('advisorName'));
+  var body = encodeURIComponent(
+'══════════════════════════════════\n' +
+'        تقرير متابعة FDP\n' +
+'══════════════════════════════════\n\n' +
+'── معلومات المرشد / Advisor ───────\n' +
+'اسم المرشد / Name:          ' + g('advisorName') + '\n' +
+'تاريخ التقرير / Date:       ' + fd(g('reportDate')) + '\n' +
+'آخر لقاء / Last Meeting:    ' + fd(g('lastMeeting')) + '\n' +
+'المتابعة القادمة / Next F-U: ' + fd(g('nextFollowup')) + '\n\n' +
+'── معلومات المشروع / Project ──────\n' +
+'كود العائلة / Family Code:  ' + g('familyCode') + '\n' +
+'اسم المستفيد / Beneficiary: ' + g('beneficiary') + '\n' +
+'اسم المشروع / Project:      ' + g('projectName') + '\n' +
+'نوع المشروع / Type:         ' + g('projectType') + '\n' +
+'المنطقة / City:             ' + g('projectCity') + '\n' +
+'مبلغ التمويل / Funding:     ' + (g('fundingAmount') ? g('fundingAmount') + ' $' : 'غير محدد') + '\n' +
+'رأس المال / Capital:        ' + (g('currentCapital') ? g('currentCapital') + ' $' : 'غير محدد') + '\n' +
+'أفراد الأسرة / Family:      ' + (g('familyMembers') || 'غير محدد') + '\n' +
+'الموظفين / Employees:       ' + (g('empCount') || 'غير محدد') + '\n\n' +
+'── حالة المشروع / Status ──────────\n' +
+'قبل التمويل / Before:  ' + (g('statusBefore') || '—') + '\n' +
+'حالياً / Current:      ' + (g('statusNow') || '—') + '\n' +
+'الملكية / Ownership:   ' + (g('ownership') || '—') + rent + '\n\n' +
+'── الأداء / Performance ───────────\n' +
+'الدخل الشهري / Income:          ' + (g('monthlyIncome') ? g('monthlyIncome') + ' $' : 'غير محدد') + '\n' +
+'تحقيق الأهداف / Goals:          ' + (g('goalPct') ? g('goalPct') + '%' : 'غير محدد') + '\n' +
+'وفق الخطة / On Track:           ' + (onTrack ? 'نعم / Yes ✅' : 'لا / No ❌') + '\n' +
+'دفعات منجزة / Paid:             ' + (g('paidInst') || 'غير محدد') + '\n' +
+'دفعات متبقية / Remaining:       ' + (g('remInst') || 'غير محدد') + '\n' +
+'الالتزام بالسداد / Commitment:  ' + (g('repayStatus') || '—') + '\n\n' +
+'── التقييم / Evaluation ───────────\n' +
+'التحديات / Challenges:\n' + (g('challenges') || 'لا يوجد') + '\n\n' +
+'الدعم المطلوب / Support:\n' + (g('supportNeeded') || 'لا يوجد') + '\n\n' +
+'توصية المرشد / Recommendation:\n' + (g('recommendation') || '—') + '\n\n' +
+'ملاحظات / Notes:\n' + (g('extraNotes') || 'لا يوجد') + '\n\n' +
+'══════════════════════════════════\n' +
+'أُرسل عبر تطبيق متابعة FDP v4.0\n'
+  );
 
-  const subject = encodeURIComponent(`[متابعة FDP] ${v('projectName')} — ${v('beneficiary')} — ${v('advisorName')}`);
-
-  const body = encodeURIComponent(
-`══════════════════════════════════════
-           تقرير متابعة FDP
-       Follow-up Report - FDP
-══════════════════════════════════════
-
-── معلومات المرشد / Advisor Info ──────
-اسم المرشد / Advisor Name:     ${v('advisorName')}
-البريد / Email:                ${v('advisorEmail')}
-تاريخ التقرير / Report Date:   ${fmtDate(v('reportDate'))}
-آخر لقاء / Last Meeting:       ${fmtDate(v('lastMeeting'))}
-المتابعة القادمة / Next F-U:   ${fmtDate(v('nextFollowup'))}
-
-── معلومات المشروع / Project Info ──────
-كود العائلة / Family Code:     ${v('familyCode')}
-اسم المستفيد / Beneficiary:    ${v('beneficiary')}
-اسم المشروع / Project Name:    ${v('projectName')}
-نوع المشروع / Project Type:    ${v('projectType')}
-المنطقة / City - Region:       ${v('projectCity')}
-مبلغ التمويل / Funding Amount: ${v('fundingAmount') ? v('fundingAmount')+' $' : 'غير محدد / N/A'}
-رأس المال الحالي / Capital:    ${v('currentCapital') ? v('currentCapital')+' $' : 'غير محدد / N/A'}
-أفراد الأسرة / Family Members: ${v('familyMembers') || 'غير محدد / N/A'}
-عدد الموظفين / Employees:      ${v('empCount') || 'غير محدد / N/A'}
-
-── حالة المشروع / Project Status ───────
-قبل التمويل / Before Funding:  ${v('statusBefore') || '—'}
-الحالة الحالية / Current:      ${v('statusNow') || '—'}
-ملكية المكان / Ownership:      ${ownerStr}
-
-── مؤشرات الأداء / Performance ─────────
-الدخل الشهري / Monthly Income:         ${v('monthlyIncome') ? v('monthlyIncome')+' $' : 'غير محدد / N/A'}
-تحقيق الأهداف / Goal Achievement:      ${v('goalPct') ? v('goalPct')+'%' : 'غير محدد / N/A'}
-وفق الخطة / On Track:                  ${onTrack ? 'نعم / Yes ✅' : 'لا / No ❌'}
-دفعات منجزة / Completed Installments:  ${v('paidInstallments') || 'غير محدد / N/A'}
-دفعات متبقية / Remaining Installments: ${v('remainInstallments') || 'غير محدد / N/A'}
-الالتزام بالسداد / Repayment:          ${v('repayStatus') || '—'}
-
-── التقييم / Evaluation ─────────────────
-التحديات / Challenges:
-${v('challenges') || 'لا يوجد / None'}
-
-الدعم المطلوب / Support Needed:
-${v('supportNeeded') || 'لا يوجد / None'}
-
-توصية المرشد / Advisor Recommendation:
-${v('recommendation') || '—'}
-
-ملاحظات إضافية / Additional Notes:
-${v('extraNotes') || 'لا يوجد / None'}
-
-══════════════════════════════════════
-أُرسل عبر تطبيق متابعة FDP v3.0
-Sent via FDP Follow-up App v3.0
-`);
-
-  setTimeout(()=>{
-    window.location.href = `mailto:ali.mohammad00.a@gmail.com?subject=${subject}&body=${body}`;
-    setTimeout(()=>{
-      for(let i=1;i<=5;i++) document.getElementById('page'+i).classList.remove('active');
-      document.getElementById('stepbar').style.display = 'none';
-      document.getElementById('successPage').classList.add('active');
-    }, 900);
+  setTimeout(function() {
+    window.location.href = 'mailto:ali.mohammad00.a@gmail.com?subject=' + subject + '&body=' + body;
+    setTimeout(function() {
+      document.getElementById('steps').style.display = 'none';
+      for(var i = 1; i <= 5; i++) document.getElementById('pg' + i).classList.remove('on');
+      document.getElementById('spage').classList.add('on');
+    }, 1000);
   }, 600);
 }
 
-// ── Reset ──
-function resetAll(){
-  const ids = ['advisorName','advisorEmail','lastMeeting','nextFollowup','familyCode','beneficiary',
+function resetAll() {
+  var ids = ['advisorName','reportDate','lastMeeting','nextFollowup','familyCode','beneficiary',
     'projectName','projectType','projectCity','fundingAmount','currentCapital','familyMembers',
     'empCount','statusBefore','statusNow','ownership','rentValue','monthlyIncome','goalPct',
-    'paidInstallments','remainInstallments','repayStatus','challenges','supportNeeded',
-    'recommendation','extraNotes'];
-  ids.forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    'paidInst','remInst','repayStatus','challenges','supportNeeded','recommendation','extraNotes'];
+  ids.forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('reportDate').value = TODAY;
   document.getElementById('onTrack').checked = false;
-  document.getElementById('trackLabel').textContent = 'لا / No';
-  document.getElementById('rentExtra').classList.remove('show');
-  document.getElementById('cc1').textContent = '0';
-  document.getElementById('cc2').textContent = '0';
-
-  document.getElementById('successPage').classList.remove('active');
-  document.getElementById('stepbar').style.display = 'flex';
-
-  for(let i=1;i<=5;i++){
-    document.getElementById('s'+i).classList.remove('active','done');
-    if(i<=4) document.getElementById('c'+i).classList.remove('done');
-  }
-  const btn = document.getElementById('sendBtn');
+  document.getElementById('trackLbl').textContent = 'لا / No';
+  document.getElementById('rentDiv').classList.remove('on');
+  document.getElementById('spage').classList.remove('on');
+  document.getElementById('steps').style.display = 'flex';
+  var btn = document.getElementById('sendBtn');
   btn.disabled = false;
   btn.innerHTML = '<span>📤</span><span>إرسال التقرير</span>';
   cur = 1;
-  document.getElementById('page1').classList.add('active');
-  document.getElementById('s1').classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+  for(var i = 1; i <= 5; i++) {
+    document.getElementById('s' + i).classList.remove('on','dn');
+    if(i <= 4) document.getElementById('l' + i).classList.remove('dn');
+  }
+  document.getElementById('pg1').classList.add('on');
+  document.getElementById('s1').classList.add('on');
+  window.scrollTo(0, 0);
 }
-
-// ── Toast ──
-function showToast(msg){
-  const t = document.getElem
+</script>
+</body>
+</html>
