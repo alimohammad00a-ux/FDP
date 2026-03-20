@@ -479,48 +479,51 @@ loadAdvisor();
 
 // ── Navigation ──
 function goTo(n){
-  if(n > cur && !validate(cur)) return;
-  const prev = cur;
-  document.getElementById('page'+prev).classList.remove('active');
-  document.getElementById('s'+prev).classList.remove('active');
-  if(n > prev) document.getElementById('s'+prev).classList.add('done');
-  else { document.getElementById('s'+prev).classList.remove('done'); document.getElementById('s'+n).classList.remove('done'); }
-  for(let i=1;i<=4;i++) document.getElementById('c'+i).classList.toggle('done', i < n);
-  cur = n;
-  document.getElementById('page'+n).classList.add('active');
-  document.getElementById('s'+n).classList.remove('done');
-  document.getElementById('s'+n).classList.add('active');
-  if(n===5) buildPreview();
-  window.scrollTo({top:0,behavior:'smooth'});
+  try {
+    if(n > cur && !validate(cur)) return;
+    var prev = cur;
+    document.getElementById('page'+prev).classList.remove('active');
+    document.getElementById('s'+prev).classList.remove('active');
+    if(n > prev) document.getElementById('s'+prev).classList.add('done');
+    else { document.getElementById('s'+prev).classList.remove('done'); document.getElementById('s'+n).classList.remove('done'); }
+    for(var i=1;i<=4;i++) document.getElementById('c'+i).classList.toggle('done', i < n);
+    cur = n;
+    document.getElementById('page'+n).classList.add('active');
+    document.getElementById('s'+n).classList.remove('done');
+    document.getElementById('s'+n).classList.add('active');
+    if(n===5) buildPreview();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } catch(e) { alert('خطأ: ' + e.message); }
 }
 
 // ── Validation ──
 function validate(p){
-  if(p===1){
-    if(!v('advisorName'))  return fail('advisorName','الرجاء إدخال اسم المرشد');
-    if(!v('advisorEmail')) return fail('advisorEmail','الرجاء إدخال البريد الإلكتروني');
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('advisorEmail'))) return fail('advisorEmail','البريد الإلكتروني غير صحيح');
-    if(!v('reportDate'))   return fail('reportDate','الرجاء اختيار تاريخ التقرير');
-    saveAdvisor();
-  }
-  if(p===2){
-    if(!v('familyCode'))    return fail('familyCode','الرجاء إدخال كود العائلة');
-    if(!v('beneficiary'))   return fail('beneficiary','الرجاء إدخال اسم المستفيد');
-    if(!v('projectName'))   return fail('projectName','الرجاء إدخال اسم المشروع');
-    if(!v('projectType'))   return fail('projectType','الرجاء إدخال نوع المشروع');
-    if(!v('projectCity'))   return fail('projectCity','الرجاء إدخال المنطقة / المدينة');
-    if(!v('fundingAmount')) return fail('fundingAmount','الرجاء إدخال مبلغ التمويل');
-    if(!v('statusBefore'))  return fail('statusBefore','الرجاء اختيار حالة المشروع قبل التمويل');
-    if(!v('statusNow'))     return fail('statusNow','الرجاء اختيار الحالة الحالية للمشروع');
-    if(!v('ownership'))     return fail('ownership','الرجاء اختيار حالة ملكية المكان');
-  }
-  if(p===3){
-    if(!v('repayStatus')) return fail('repayStatus','الرجاء اختيار حالة الالتزام بالسداد');
-  }
-  if(p===4){
-    if(!v('recommendation')) return fail('recommendation','الرجاء اختيار توصية المرشد');
-  }
-  return true;
+  try {
+    if(p===1){
+      if(!v('advisorName'))  { showToast('الرجاء إدخال اسم المرشد'); return false; }
+      if(!v('advisorEmail')) { showToast('الرجاء إدخال البريد الإلكتروني'); return false; }
+      if(!v('reportDate'))   { showToast('الرجاء اختيار تاريخ التقرير'); return false; }
+      saveAdvisor();
+    }
+    if(p===2){
+      if(!v('familyCode'))    { showToast('الرجاء إدخال كود العائلة'); return false; }
+      if(!v('beneficiary'))   { showToast('الرجاء إدخال اسم المستفيد'); return false; }
+      if(!v('projectName'))   { showToast('الرجاء إدخال اسم المشروع'); return false; }
+      if(!v('projectType'))   { showToast('الرجاء إدخال نوع المشروع'); return false; }
+      if(!v('projectCity'))   { showToast('الرجاء إدخال المنطقة / المدينة'); return false; }
+      if(!v('fundingAmount')) { showToast('الرجاء إدخال مبلغ التمويل'); return false; }
+      if(!v('statusBefore'))  { showToast('الرجاء اختيار حالة المشروع قبل التمويل'); return false; }
+      if(!v('statusNow'))     { showToast('الرجاء اختيار الحالة الحالية للمشروع'); return false; }
+      if(!v('ownership'))     { showToast('الرجاء اختيار حالة ملكية المكان'); return false; }
+    }
+    if(p===3){
+      if(!v('repayStatus')) { showToast('الرجاء اختيار حالة الالتزام بالسداد'); return false; }
+    }
+    if(p===4){
+      if(!v('recommendation')) { showToast('الرجاء اختيار توصية المرشد'); return false; }
+    }
+    return true;
+  } catch(e) { return true; }
 }
 
 function v(id){ return document.getElementById(id).value.trim(); }
