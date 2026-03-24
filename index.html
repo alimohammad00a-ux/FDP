@@ -14,13 +14,11 @@
   --bg:#0d1117; --surface:#161b22; --surface2:#1c2330; --border:#30363d;
   --accent:#2ea44f; --accent2:#3fb950; --glow:rgba(46,164,79,0.2);
   --text:#e6edf3; --muted:#8b949e; --danger:#f85149; --dbg:rgba(248,81,73,0.1);
-  --yellow:#d29922;
+  --yellow:#d29922; --blue:#388bfd;
 }
 * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 body { font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; }
 .app { width:100%; max-width:480px; min-height:100vh; display:flex; flex-direction:column; }
-
-/* Header */
 .hdr { background:#161b22; border-bottom:1px solid var(--border); padding:14px 16px 12px; position:sticky; top:0; z-index:100; }
 .hdr-top { display:flex; align-items:center; gap:10px; }
 .logo { width:38px; height:38px; background:linear-gradient(135deg,var(--accent),#1a7f37); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
@@ -29,8 +27,6 @@ body { font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); 
 .pill { display:inline-flex; align-items:center; gap:5px; background:rgba(46,164,79,.1); border:1px solid rgba(46,164,79,.25); border-radius:20px; padding:2px 9px; font-size:10px; color:var(--accent2); font-family:'Tajawal',sans-serif; margin-top:8px; }
 .dot { width:5px; height:5px; border-radius:50%; background:var(--accent); animation:blink 2s infinite; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* Steps */
 .steps { display:flex; align-items:flex-start; padding:10px 14px 0; }
 .st { display:flex; flex-direction:column; align-items:center; gap:3px; flex:1; }
 .sc { width:24px; height:24px; border-radius:50%; background:var(--surface2); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:var(--muted); transition:all .25s; }
@@ -40,40 +36,34 @@ body { font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); 
 .st.on .sl { color:var(--accent2); }
 .ln { flex:1; height:2px; background:var(--border); margin-top:11px; transition:background .25s; }
 .ln.dn { background:var(--accent); }
-
-/* Content */
 .cnt { flex:1; padding:11px 12px 24px; display:flex; flex-direction:column; gap:12px; }
-
-/* Pages */
 .pg { display:none; flex-direction:column; gap:12px; }
 .pg.on { display:flex; }
-
-/* Card */
 .card { background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:14px; }
 .ct { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; display:flex; align-items:center; gap:6px; font-family:'Tajawal',sans-serif; }
 .ct::before { content:''; width:3px; height:11px; background:var(--accent); border-radius:2px; }
-
-/* Fields */
 .f { margin-bottom:11px; }
 .f:last-child { margin-bottom:0; }
 .fr { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:11px; }
 .fr:last-child { margin-bottom:0; }
 label { display:block; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; font-family:'Tajawal',sans-serif; }
-label span.r { color:var(--danger); }
-label span.s { font-size:9px; color:#484f58; font-weight:400; direction:ltr; }
+label .r { color:var(--danger); }
+label .s { font-size:9px; color:#484f58; font-weight:400; direction:ltr; }
 input, textarea, select { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:7px; padding:9px 11px; color:var(--text); font-family:'Cairo',sans-serif; font-size:13px; outline:none; -webkit-appearance:none; appearance:none; transition:border-color .2s; }
 input:focus, textarea:focus, select:focus { border-color:var(--accent); background:var(--surface2); }
 input::placeholder, textarea::placeholder { color:#484f58; }
 input[type="date"] { color-scheme:dark; }
 input[type="number"] { direction:ltr; text-align:right; }
+input[type="tel"] { direction:ltr; text-align:right; }
 textarea { resize:none; line-height:1.6; }
 select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%238b949e' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:left 10px center; padding-left:26px; cursor:pointer; }
 select option { background:var(--surface2); }
 .iw { position:relative; }
-.iw input { padding-left:32px; }
-.isuf { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:11px; pointer-events:none; }
-
-/* Toggle */
+.iw input { padding-left:54px; }
+.isuf { position:absolute; left:6px; top:50%; transform:translateY(-50%); color:var(--accent2); font-size:9px; font-weight:700; pointer-events:none; font-family:'Tajawal',sans-serif; background:rgba(46,164,79,.1); border:1px solid rgba(46,164,79,.2); border-radius:4px; padding:2px 4px; white-space:nowrap; max-width:48px; overflow:hidden; }
+.curr-sel { display:flex; gap:6px; }
+.curr-btn { flex:1; padding:8px 4px; border:1px solid var(--border); border-radius:7px; background:var(--bg); color:var(--muted); font-size:11px; font-family:'Tajawal',sans-serif; font-weight:600; cursor:pointer; text-align:center; transition:all .2s; }
+.curr-btn.on { border-color:var(--accent); background:rgba(46,164,79,.1); color:var(--accent2); }
 .trow { display:flex; align-items:center; justify-content:space-between; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
 .tlbl { font-size:13px; font-weight:600; }
 .tsub { font-size:9px; color:var(--muted); font-family:'Tajawal',sans-serif; }
@@ -83,73 +73,59 @@ select option { background:var(--surface2); }
 .sldr::before { content:''; position:absolute; width:17px; height:17px; border-radius:50%; background:#fff; left:3px; top:3px; transition:transform .25s; }
 .tgl input:checked + .sldr { background:var(--accent); }
 .tgl input:checked + .sldr::before { transform:translateX(19px); }
-
-/* Rent */
-.rent { display:none; margin-top:10px; }
-.rent.on { display:block; }
-
-/* Saved banner */
+.cond { display:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+.cond.on { display:block; }
+.chk-group { display:flex; flex-direction:column; gap:7px; }
+.chk-item { display:flex; align-items:center; gap:8px; background:var(--bg); border:1px solid var(--border); border-radius:7px; padding:9px 11px; cursor:pointer; transition:border-color .2s; }
+.chk-item.on { border-color:var(--accent); background:rgba(46,164,79,.06); }
+.chk-item input[type="checkbox"] { width:16px; height:16px; cursor:pointer; accent-color:var(--accent); flex-shrink:0; }
+.chk-item span { font-size:12px; font-family:'Tajawal',sans-serif; }
 .saved-banner { display:none; align-items:center; justify-content:space-between; background:rgba(46,164,79,.08); border:1px solid rgba(46,164,79,.2); border-radius:8px; padding:8px 12px; margin-bottom:11px; }
 .saved-banner.on { display:flex; }
 .saved-txt { font-size:10px; color:var(--accent2); font-family:'Tajawal',sans-serif; }
 .saved-clr { background:transparent; border:1px solid #484f58; border-radius:5px; padding:3px 8px; color:var(--muted); font-size:10px; font-family:'Tajawal',sans-serif; cursor:pointer; }
-
-/* Nav */
 .nav { display:flex; gap:8px; }
-.btn { flex:1; padding:13px; border:none; border-radius:10px; font-size:14px; font-weight:700; font-family:'Cairo',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; }
+.btn { flex:1; padding:13px; border:none; border-radius:10px; font-size:14px; font-weight:700; font-family:'Cairo',sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:all .2s; }
 .btn-n { background:linear-gradient(135deg,var(--accent),#1a7f37); color:#fff; box-shadow:0 4px 14px var(--glow); }
+.btn-n:active { transform:scale(.97); }
 .btn-b { background:var(--surface); color:var(--muted); border:1px solid var(--border); flex:0 0 auto; padding:13px 15px; }
-
-/* Dest */
+.psec { font-size:9px; font-weight:700; color:var(--accent2); font-family:'Tajawal',sans-serif; padding:8px 0 3px; border-bottom:1px solid rgba(46,164,79,.2); margin-bottom:2px; text-transform:uppercase; letter-spacing:.4px; }
+.prow { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(48,54,61,.6); gap:8px; }
+.prow:last-child { border-bottom:none; }
+.pk { font-size:10px; color:var(--muted); font-family:'Tajawal',sans-serif; flex-shrink:0; max-width:44%; line-height:1.4; }
+.pv { font-size:11px; font-weight:600; text-align:left; word-break:break-word; max-width:54%; line-height:1.5; }
+.badge { display:inline-block; padding:1px 7px; border-radius:20px; font-size:10px; font-weight:700; font-family:'Tajawal',sans-serif; }
+.bg { background:rgba(46,164,79,.15); color:var(--accent2); border:1px solid rgba(46,164,79,.3); }
+.br { background:rgba(248,81,73,.12); color:var(--danger); border:1px solid rgba(248,81,73,.3); }
 .dest { display:flex; align-items:center; gap:9px; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
 .dico { width:30px; height:30px; background:rgba(46,164,79,.15); border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
 .dlbl { font-size:10px; color:var(--muted); font-family:'Tajawal',sans-serif; }
 .deml { font-size:11px; color:var(--accent2); font-weight:700; direction:ltr; }
-
-/* Preview */
-.psec { font-size:9px; font-weight:700; color:var(--accent2); font-family:'Tajawal',sans-serif; padding:8px 0 3px; border-bottom:1px solid rgba(46,164,79,.2); margin-bottom:2px; text-transform:uppercase; letter-spacing:.4px; }
-.prow { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(48,54,61,.6); gap:8px; }
-.prow:last-child { border-bottom:none; }
-.pk { font-size:10px; color:var(--muted); font-family:'Tajawal',sans-serif; flex-shrink:0; max-width:44%; }
-.pv { font-size:11px; font-weight:600; text-align:left; word-break:break-word; max-width:54%; }
-.bg { display:inline-block; padding:1px 7px; border-radius:20px; font-size:10px; font-weight:700; font-family:'Tajawal',sans-serif; background:rgba(46,164,79,.15); color:var(--accent2); border:1px solid rgba(46,164,79,.3); }
-.br { display:inline-block; padding:1px 7px; border-radius:20px; font-size:10px; font-weight:700; font-family:'Tajawal',sans-serif; background:rgba(248,81,73,.12); color:var(--danger); border:1px solid rgba(248,81,73,.3); }
-
-/* Spinner */
 .spin { width:17px; height:17px; border:2px solid rgba(255,255,255,.3); border-top-color:#fff; border-radius:50%; animation:sp .7s linear infinite; }
 @keyframes sp { to { transform:rotate(360deg); } }
-
-/* Success */
 .spage { display:none; flex-direction:column; align-items:center; justify-content:center; padding:50px 22px; text-align:center; }
 .spage.on { display:flex; }
-.sring { width:76px; height:76px; background:rgba(46,164,79,.12); border:2px solid var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:34px; margin-bottom:18px; }
+.sring { width:76px; height:76px; background:rgba(46,164,79,.12); border:2px solid var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:34px; margin-bottom:18px; animation:pop .5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes pop { from{transform:scale(0)} to{transform:scale(1)} }
 .stit { font-size:21px; font-weight:900; margin-bottom:7px; }
 .ssub { font-size:13px; color:var(--muted); font-family:'Tajawal',sans-serif; line-height:1.7; margin-bottom:26px; }
 .btn-new { padding:11px 26px; background:transparent; border:1px solid var(--accent); border-radius:9px; color:var(--accent2); font-size:13px; font-weight:600; font-family:'Cairo',sans-serif; cursor:pointer; }
-
-/* Toast */
 .toast { position:fixed; top:12px; left:50%; transform:translateX(-50%) translateY(-110px); background:var(--surface); border:1px solid rgba(248,81,73,.4); border-radius:10px; padding:10px 15px; display:flex; align-items:center; gap:8px; font-size:12px; font-family:'Cairo',sans-serif; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.45); z-index:9999; transition:transform .3s; min-width:240px; max-width:92vw; }
 .toast.on { transform:translateX(-50%) translateY(0); }
-
 .footer { text-align:center; padding:12px; font-size:10px; color:#484f58; font-family:'Tajawal',sans-serif; border-top:1px solid var(--border); }
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- Header -->
 <div class="hdr">
   <div class="hdr-top">
     <div class="logo">📋</div>
-    <div>
-      <h1>متابعة FDP</h1>
-      <p>نظام إرسال التقارير · Report System</p>
-    </div>
+    <div><h1>متابعة FDP</h1><p>نظام إرسال التقارير · Report System</p></div>
   </div>
   <div class="pill"><div class="dot"></div>جاهز للإرسال · Ready</div>
 </div>
 
-<!-- Steps -->
 <div class="steps" id="steps">
   <div class="st on" id="s1"><div class="sc">1</div><div class="sl">المرشد</div></div>
   <div class="ln" id="l1"></div>
@@ -162,25 +138,27 @@ select option { background:var(--surface2); }
   <div class="st" id="s5"><div class="sc">5</div><div class="sl">مراجعة</div></div>
 </div>
 
-<!-- Content -->
 <div class="cnt">
 
 <!-- PAGE 1 -->
 <div class="pg on" id="pg1">
   <div class="card">
     <div class="ct">معلومات المرشد · Advisor Info</div>
-
     <div class="saved-banner" id="savedBanner">
-      <div>
-        <div class="saved-txt">💾 بياناتك محفوظة · Info Saved</div>
-        <div style="font-size:9px;color:#8b949e;font-family:'Tajawal',sans-serif;">ستظهر تلقائياً في المرة القادمة</div>
-      </div>
+      <div><div class="saved-txt">💾 بياناتك محفوظة · Info Saved</div><div style="font-size:9px;color:#8b949e;font-family:'Tajawal',sans-serif;">ستظهر تلقائياً في المرة القادمة</div></div>
       <button class="saved-clr" onclick="clearSaved()">مسح · Clear</button>
     </div>
-
     <div class="f">
       <label>اسم المرشد <span class="r">*</span> <span class="s">Advisor Name</span></label>
       <input type="text" id="advisorName" placeholder="أدخل اسمك الكامل">
+    </div>
+    <div class="f">
+      <label>العملة المستخدمة <span class="r">*</span> <span class="s">Currency</span></label>
+      <div class="curr-sel">
+        <button class="curr-btn" id="c1" onclick="setCurr('ل.س قديمة','c1')">🔴 ل.س قديمة</button>
+        <button class="curr-btn" id="c2" onclick="setCurr('ل.س جديدة','c2')">🟢 ل.س جديدة</button>
+        <button class="curr-btn" id="c3" onclick="setCurr('$','c3')">💵 دولار</button>
+      </div>
     </div>
     <div class="fr">
       <div>
@@ -188,18 +166,23 @@ select option { background:var(--surface2); }
         <input type="date" id="reportDate">
       </div>
       <div>
-        <label>آخر لقاء <span class="s">Last Meeting</span></label>
-        <input type="date" id="lastMeeting">
+        <label>أول متابعة؟ <span class="s">First Visit?</span></label>
+        <div class="trow" style="margin-top:0">
+          <div><div class="tlbl" id="firstVisitLbl">لا</div></div>
+          <label class="tgl"><input type="checkbox" id="firstVisit" onchange="updFirstVisit()"><span class="sldr"></span></label>
+        </div>
       </div>
+    </div>
+    <div class="f" id="lastMeetingDiv">
+      <label>تاريخ آخر متابعة سابقة <span class="s">Last Visit</span></label>
+      <input type="date" id="lastMeeting">
     </div>
     <div class="f">
       <label>موعد المتابعة القادمة <span class="s">Next Follow-up</span></label>
       <input type="date" id="nextFollowup">
     </div>
   </div>
-  <div class="nav">
-    <button class="btn btn-n" onclick="next(1)">التالي ←</button>
-  </div>
+  <div class="nav"><button class="btn btn-n" onclick="next(1)">التالي ←</button></div>
 </div>
 
 <!-- PAGE 2 -->
@@ -212,33 +195,64 @@ select option { background:var(--surface2); }
         <input type="text" id="familyCode" placeholder="F-001">
       </div>
       <div>
-        <label>اسم المستفيد <span class="r">*</span> <span class="s">Beneficiary</span></label>
-        <input type="text" id="beneficiary" placeholder="الاسم الكامل">
+        <label>رقم هوية المستفيد <span class="r">*</span> <span class="s">ID</span></label>
+        <input type="text" id="beneficiaryId" placeholder="000000000">
       </div>
     </div>
     <div class="f">
-      <label>اسم المشروع <span class="r">*</span> <span class="s">Project Name</span></label>
-      <input type="text" id="projectName" placeholder="أدخل اسم المشروع">
+      <label>اسم المستفيد <span class="r">*</span> <span class="s">Beneficiary</span></label>
+      <input type="text" id="beneficiary" placeholder="الاسم الكامل">
+    </div>
+    <div class="f">
+      <label>رقم هاتف المستفيد <span class="r">*</span> <span class="s">Phone</span></label>
+      <input type="tel" id="beneficiaryPhone" placeholder="09xxxxxxxx">
     </div>
     <div class="fr">
       <div>
-        <label>نوع المشروع <span class="r">*</span> <span class="s">Type</span></label>
-        <input type="text" id="projectType" placeholder="تجاري، زراعي...">
+        <label>المحافظة <span class="r">*</span> <span class="s">Gov.</span></label>
+        <select id="governorate">
+          <option value="">-- اختر --</option>
+          <option>دمشق</option><option>ريف دمشق</option><option>حلب</option>
+          <option>حمص</option><option>حماة</option><option>سلمية</option>
+          <option>اللاذقية</option><option>طرطوس</option><option>إدلب</option>
+          <option>دير الزور</option><option>الرقة</option><option>الحسكة</option>
+          <option>درعا</option><option>السويداء</option><option>القنيطرة</option>
+        </select>
       </div>
       <div>
         <label>المنطقة / المدينة <span class="r">*</span> <span class="s">City</span></label>
         <input type="text" id="projectCity" placeholder="اسم المدينة">
       </div>
     </div>
+    <div class="f">
+      <label>المرشد المسؤول السابق <span class="s">Previous Advisor</span></label>
+      <input type="text" id="prevAdvisor" placeholder="إن وجد">
+    </div>
+    <div class="f">
+      <label>اسم المشروع <span class="r">*</span> <span class="s">Project Name</span></label>
+      <input type="text" id="projectName" placeholder="أدخل اسم المشروع">
+    </div>
+    <div class="f">
+      <label>نوع المشروع <span class="r">*</span> <span class="s">Type</span></label>
+      <input type="text" id="projectType" placeholder="تجاري، زراعي، خدمي...">
+    </div>
     <div class="fr">
       <div>
-        <label>مبلغ التمويل <span class="r">*</span> <span class="s">Funding</span></label>
-        <div class="iw"><input type="number" id="fundingAmount" placeholder="0" min="0"><span class="isuf">$</span></div>
+        <label>سنة التمويل <span class="r">*</span> <span class="s">Year</span></label>
+        <input type="number" id="fundingYear" placeholder="2024" min="2000" max="2030">
       </div>
       <div>
-        <label>رأس المال الحالي <span class="s">Capital</span></label>
-        <div class="iw"><input type="number" id="currentCapital" placeholder="0" min="0"><span class="isuf">$</span></div>
+        <label>عدد دفعات التمويل <span class="r">*</span> <span class="s">Inst.</span></label>
+        <input type="number" id="fundingInstallments" placeholder="0" min="0">
       </div>
+    </div>
+    <div class="f">
+      <label>مبلغ التمويل <span class="r">*</span> <span class="s">Funding</span></label>
+      <div class="iw"><input type="number" id="fundingAmount" placeholder="0" min="0"><span class="isuf" id="suf1">...</span></div>
+    </div>
+    <div class="f">
+      <label>رأس المال الحالي <span class="s">Capital</span></label>
+      <div class="iw"><input type="number" id="currentCapital" placeholder="0" min="0"><span class="isuf" id="suf2">...</span></div>
     </div>
     <div class="fr">
       <div>
@@ -246,7 +260,7 @@ select option { background:var(--surface2); }
         <input type="number" id="familyMembers" placeholder="0" min="0">
       </div>
       <div>
-        <label>عدد الموظفين <span class="s">Employees</span></label>
+        <label>العمال الدائمين <span class="s">Workers</span></label>
         <input type="number" id="empCount" placeholder="0" min="0">
       </div>
     </div>
@@ -255,23 +269,24 @@ select option { background:var(--surface2); }
   <div class="card">
     <div class="ct">حالة المشروع · Status</div>
     <div class="f">
-      <label>قبل التمويل <span class="r">*</span> <span class="s">Before Funding</span></label>
+      <label>قبل التمويل <span class="r">*</span> <span class="s">Before</span></label>
       <select id="statusBefore">
-        <option value="">-- اختر / Select --</option>
-        <option value="مشروع جديد / New Project">🆕 مشروع جديد / New Project</option>
-        <option value="مشروع قائم / Existing Project">✅ مشروع قائم / Existing Project</option>
-        <option value="متوقف - أصول بلا دخل / Paused">⏸️ متوقف - أصول بلا دخل / Paused</option>
+        <option value="">-- اختر --</option>
+        <option value="مشروع جديد">🆕 مشروع جديد / New</option>
+        <option value="مشروع قائم">✅ مشروع قائم / Existing</option>
+        <option value="متوقف - أصول بلا دخل">⏸️ متوقف - أصول بلا دخل / Paused</option>
+        <option value="متعثر - دخل قليل جداً">⚠️ متعثر - دخل قليل جداً / Struggling</option>
       </select>
     </div>
     <div class="f">
-      <label>حالياً وقت الزيارة <span class="r">*</span> <span class="s">Current Status</span></label>
+      <label>حالياً وقت الزيارة <span class="r">*</span> <span class="s">Current</span></label>
       <select id="statusNow">
-        <option value="">-- اختر / Select --</option>
-        <option value="مستمر - دخل جيد / Active Good Income">💚 مستمر - دخل جيد / Active - Good Income</option>
-        <option value="مستمر - دخل متوسط / Active Average Income">🟡 مستمر - دخل متوسط / Active - Average Income</option>
-        <option value="مستمر - دخل ضعيف / Active Low Income">🟠 مستمر - دخل ضعيف / Active - Low Income</option>
-        <option value="متعثر / Struggling">⚠️ متعثر / Struggling</option>
-        <option value="في طريقه للتوقف / Near Closure">🔴 في طريقه للتوقف / Near Closure</option>
+        <option value="">-- اختر --</option>
+        <option value="مستمر - دخل جيد">💚 مستمر - دخل جيد / Good</option>
+        <option value="مستمر - دخل متوسط">🟡 مستمر - دخل متوسط / Average</option>
+        <option value="مستمر - دخل ضعيف">🟠 مستمر - دخل ضعيف / Low</option>
+        <option value="متعثر">⚠️ متعثر / Struggling</option>
+        <option value="في طريقه للتوقف">🔴 في طريقه للتوقف / Near Closure</option>
       </select>
     </div>
   </div>
@@ -281,14 +296,42 @@ select option { background:var(--surface2); }
     <div class="f">
       <label>حالة الملكية <span class="r">*</span> <span class="s">Status</span></label>
       <select id="ownership" onchange="toggleRent()">
-        <option value="">-- اختر / Select --</option>
-        <option value="ملك / Owned">🏠 ملك / Owned</option>
-        <option value="إيجار / Rented">🔑 إيجار / Rented</option>
-        <option value="غير مملوك بلا إيجار / Used Free">🤝 غير مملوك بلا إيجار / Used Free</option>
+        <option value="">-- اختر --</option>
+        <option value="ملك">🏠 ملك / Owned</option>
+        <option value="إيجار">🔑 إيجار / Rented</option>
+        <option value="غير مملوك بلا إيجار">🤝 غير مملوك بلا إيجار / Free</option>
       </select>
-      <div class="rent" id="rentDiv">
-        <label style="margin-top:10px;">قيمة الإيجار الشهري <span class="s">Monthly Rent</span></label>
-        <div class="iw"><input type="number" id="rentValue" placeholder="0" min="0"><span class="isuf">$</span></div>
+      <div class="cond" id="rentDiv">
+        <label style="margin-top:2px;">قيمة الإيجار الشهري <span class="s">Rent</span></label>
+        <div class="iw"><input type="number" id="rentValue" placeholder="0" min="0"><span class="isuf" id="suf3">...</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">الدعم الاجتماعي · Social Support</div>
+    <div class="f">
+      <label style="margin-bottom:8px;">هل كان هناك دعم اجتماعي؟ <span class="s">Social Support?</span></label>
+      <div class="trow">
+        <div><div class="tlbl" id="socialLbl">لا / No</div><div class="tsub">اضغط للتبديل</div></div>
+        <label class="tgl"><input type="checkbox" id="hasSocial" onchange="toggleSocial()"><span class="sldr"></span></label>
+      </div>
+      <div class="cond" id="socialDiv">
+        <label style="margin-bottom:8px;">نوع الدعم <span class="s">Type</span></label>
+        <div class="chk-group">
+          <div class="chk-item" id="chk-edu" onclick="toggleChk('edu')"><input type="checkbox" id="sup-edu" onclick="event.stopPropagation()"> <span>📚 تعليمي / Educational</span></div>
+          <div class="chk-item" id="chk-health" onclick="toggleChk('health')"><input type="checkbox" id="sup-health" onclick="event.stopPropagation()"> <span>🏥 صحي / Health</span></div>
+          <div class="chk-item" id="chk-housing" onclick="toggleChk('housing')"><input type="checkbox" id="sup-housing" onclick="event.stopPropagation()"> <span>🏠 سكني / Housing</span></div>
+          <div class="chk-item" id="chk-other" onclick="toggleChk('other')"><input type="checkbox" id="sup-other" onclick="event.stopPropagation()"> <span>📝 أخرى / Other</span></div>
+        </div>
+        <div class="cond" id="otherSupportDiv" style="margin-top:8px;">
+          <label>نوع الدعم الآخر <span class="s">Other</span></label>
+          <input type="text" id="otherSupport" placeholder="اكتب نوع الدعم...">
+        </div>
+        <div style="margin-top:10px;">
+          <label>قيمة الدعم <span class="s">Value</span></label>
+          <div class="iw"><input type="number" id="socialValue" placeholder="0" min="0"><span class="isuf" id="suf4">...</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -303,28 +346,30 @@ select option { background:var(--surface2); }
 <div class="pg" id="pg3">
   <div class="card">
     <div class="ct">مؤشرات الأداء · Performance</div>
-    <div class="fr">
-      <div>
-        <label>الدخل الشهري <span class="s">Income</span></label>
-        <div class="iw"><input type="number" id="monthlyIncome" placeholder="0" min="0"><span class="isuf">$</span></div>
-      </div>
-      <div>
-        <label>نسبة الأهداف <span class="s">Goals %</span></label>
-        <div class="iw"><input type="number" id="goalPct" placeholder="0" min="0" max="100"><span class="isuf">%</span></div>
-      </div>
+    <div class="f">
+      <label>الدخل الشهري <span class="s">Income</span></label>
+      <div class="iw"><input type="number" id="monthlyIncome" placeholder="0" min="0"><span class="isuf" id="suf5">...</span></div>
+    </div>
+    <div class="f">
+      <label>تغطية دخل المشروع لنفقات الأسرة <span class="s">Coverage</span></label>
+      <select id="incomeCoverage">
+        <option value="">-- اختر --</option>
+        <option value="لا يغطي النفقات">🔴 لا يغطي النفقات / No Coverage</option>
+        <option value="يغطي أقل من 25%">🟠 يغطي أقل من 25%</option>
+        <option value="يغطي 25%-50%">🟡 يغطي 25% - 50%</option>
+        <option value="يغطي 50%-75%">🟢 يغطي 50% - 75%</option>
+        <option value="يغطي أكثر من 75%">💚 يغطي أكثر من 75%</option>
+        <option value="يغطي النفقات بالكامل">✅ يغطي بالكامل / Full Coverage</option>
+      </select>
     </div>
     <div class="f">
       <label style="margin-bottom:8px;">هل المشروع وفق الخطة؟ <span class="s">On Track?</span></label>
       <div class="trow">
-        <div>
-          <div class="tlbl" id="trackLbl">لا / No</div>
-          <div class="tsub">اضغط للتبديل · Tap to toggle</div>
-        </div>
+        <div><div class="tlbl" id="trackLbl">لا / No</div><div class="tsub">اضغط للتبديل</div></div>
         <label class="tgl"><input type="checkbox" id="onTrack" onchange="updTrack()"><span class="sldr"></span></label>
       </div>
     </div>
   </div>
-
   <div class="card">
     <div class="ct">السداد · Repayment</div>
     <div class="fr">
@@ -340,14 +385,13 @@ select option { background:var(--surface2); }
     <div class="f">
       <label>الالتزام بالسداد <span class="r">*</span> <span class="s">Commitment</span></label>
       <select id="repayStatus">
-        <option value="">-- اختر / Select --</option>
-        <option value="ملتزم / Committed">✅ ملتزم / Committed</option>
-        <option value="متأخر أحياناً / Occasionally Late">⚠️ متأخر أحياناً / Occasionally Late</option>
-        <option value="متأخر بشكل متكرر / Frequently Late">❌ متأخر بشكل متكرر / Frequently Late</option>
+        <option value="">-- اختر --</option>
+        <option value="ملتزم">✅ ملتزم / Committed</option>
+        <option value="متأخر أحياناً">⚠️ متأخر أحياناً / Occasionally Late</option>
+        <option value="متأخر بشكل متكرر">❌ متأخر بشكل متكرر / Frequently Late</option>
       </select>
     </div>
   </div>
-
   <div class="nav">
     <button class="btn btn-b" onclick="prev(3)">→</button>
     <button class="btn btn-n" onclick="next(3)">التالي ←</button>
@@ -365,27 +409,26 @@ select option { background:var(--surface2); }
     <div class="f">
       <label>الدعم المطلوب <span class="s">Support Needed</span></label>
       <select id="supportNeeded">
-        <option value="">-- اختر / Select --</option>
-        <option value="دعم مالي / Financial Support">💰 دعم مالي / Financial Support</option>
-        <option value="دعم استشاري / Advisory Support">🎓 دعم استشاري / Advisory Support</option>
-        <option value="دعم مالي واستشاري / Financial and Advisory">💰🎓 دعم مالي واستشاري / Financial & Advisory</option>
-        <option value="لا يحتاج دعماً إضافياً / No Support Needed">✅ لا يحتاج دعماً إضافياً / No Support Needed</option>
+        <option value="">-- اختر --</option>
+        <option value="دعم مالي">💰 دعم مالي / Financial</option>
+        <option value="دعم استشاري">🎓 دعم استشاري / Advisory</option>
+        <option value="دعم مالي واستشاري">💰🎓 مالي واستشاري / Both</option>
+        <option value="لا يحتاج دعماً">✅ لا يحتاج دعماً / None</option>
       </select>
     </div>
   </div>
-
   <div class="card">
     <div class="ct">توصية المرشد · Recommendation</div>
     <div class="f">
       <label>التوصية <span class="r">*</span> <span class="s">Recommendation</span></label>
       <select id="recommendation">
-        <option value="">-- اختر / Select --</option>
-        <option value="متابعة عادية / Regular Follow-up">✅ متابعة عادية / Regular Follow-up</option>
-        <option value="يحتاج متابعة مكثفة / Intensive Follow-up">⚠️ يحتاج متابعة مكثفة / Intensive Follow-up</option>
-        <option value="يُنصح بتمويل إضافي / Additional Funding">💰 يُنصح بتمويل إضافي / Additional Funding</option>
-        <option value="يحتاج دعم استشاري / Advisory Support">🎓 يحتاج دعم استشاري / Advisory Support</option>
-        <option value="يحتاج تمويل إضافي ودعم استشاري / Funding and Advisory">💰🎓 يحتاج تمويل + دعم استشاري / Funding & Advisory</option>
-        <option value="الحالة تستدعي تدخلاً عاجلاً / Urgent Intervention">🚨 الحالة تستدعي تدخلاً عاجلاً / Urgent</option>
+        <option value="">-- اختر --</option>
+        <option value="متابعة عادية">✅ متابعة عادية / Regular</option>
+        <option value="متابعة مكثفة">⚠️ يحتاج متابعة مكثفة / Intensive</option>
+        <option value="تمويل إضافي">💰 يُنصح بتمويل إضافي / More Funding</option>
+        <option value="دعم استشاري">🎓 يحتاج دعم استشاري / Advisory</option>
+        <option value="تمويل + استشاري">💰🎓 تمويل + استشاري / Both</option>
+        <option value="تدخل عاجل">🚨 تدخل عاجل / Urgent</option>
       </select>
     </div>
     <div class="f">
@@ -393,7 +436,6 @@ select option { background:var(--surface2); }
       <textarea id="extraNotes" rows="3" placeholder="أي ملاحظات إضافية..."></textarea>
     </div>
   </div>
-
   <div class="nav">
     <button class="btn btn-b" onclick="prev(4)">→</button>
     <button class="btn btn-n" onclick="next(4)">مراجعة ←</button>
@@ -410,248 +452,275 @@ select option { background:var(--surface2); }
     <div class="ct">وجهة الإرسال · Destination</div>
     <div class="dest">
       <div class="dico">✉️</div>
-      <div>
-        <div class="dlbl">سيُرسل إلى · Will be sent to</div>
-        <div class="deml">ali.mohammad00.a@gmail.com</div>
-      </div>
+      <div><div class="dlbl">سيُرسل إلى · Email</div><div class="deml">ali.mohammad00.a@gmail.com</div></div>
+    </div>
+    <div class="dest" style="margin-top:8px;">
+      <div class="dico">📊</div>
+      <div><div class="dlbl">وسيُحفظ في · Google Sheets</div><div class="deml">قاعدة بيانات FDP</div></div>
     </div>
   </div>
   <div class="nav">
     <button class="btn btn-b" onclick="prev(5)">→</button>
-    <button class="btn btn-n" id="sendBtn" onclick="sendReport()">
-      <span>📤</span><span>إرسال التقرير</span>
-    </button>
+    <button class="btn btn-n" id="sendBtn" onclick="sendReport()"><span>📤</span><span>إرسال وحفظ</span></button>
   </div>
 </div>
 
 <!-- SUCCESS -->
 <div class="spage" id="spage">
   <div class="sring">✓</div>
-  <div class="stit">تم الإرسال! 🎉</div>
-  <div class="ssub">تم تجهيز التقرير وفتح تطبيق البريد الإلكتروني<br>Tap Send in your mail app</div>
+  <div class="stit">تم الإرسال والحفظ! 🎉</div>
+  <div class="ssub">✅ تم حفظ التقرير في Google Sheets<br>📧 افتح تطبيق الإيميل وأرسل التقرير</div>
   <button class="btn-new" onclick="resetAll()">+ تقرير جديد · New Report</button>
 </div>
 
-</div><!-- cnt -->
-<div class="footer">متابعة FDP · v4.0</div>
-</div><!-- app -->
+</div>
+<div class="footer">متابعة FDP · v5.0</div>
+</div>
 
-<div class="toast" id="toast"><span id="ticon">⚠️</span> <span id="tmsg"></span></div>
+<div class="toast" id="toast"><span>⚠️</span> <span id="tmsg"></span></div>
 
 <script>
+var SHEETS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
 var cur = 1;
 var TODAY = new Date().toISOString().split('T')[0];
+var currency = '';
 document.getElementById('reportDate').value = TODAY;
-
-// Load saved advisor
 var sn = localStorage.getItem('fdp_name');
-if(sn) {
-  document.getElementById('advisorName').value = sn;
-  document.getElementById('savedBanner').classList.add('on');
+if(sn){ document.getElementById('advisorName').value = sn; document.getElementById('savedBanner').classList.add('on'); }
+
+function setCurr(c,btnId){
+  currency = c;
+  ['c1','c2','c3'].forEach(function(id){ document.getElementById(id).classList.remove('on'); });
+  document.getElementById(btnId).classList.add('on');
+  ['suf1','suf2','suf3','suf4','suf5'].forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent=c; });
 }
 
-function g(id) { return document.getElementById(id).value.trim(); }
-
-function toast(msg) {
-  document.getElementById('tmsg').textContent = msg;
-  var t = document.getElementById('toast');
-  t.classList.add('on');
-  setTimeout(function(){ t.classList.remove('on'); }, 3000);
+function updFirstVisit(){
+  var isFirst = document.getElementById('firstVisit').checked;
+  document.getElementById('firstVisitLbl').textContent = isFirst ? 'نعم' : 'لا';
+  if(isFirst){ document.getElementById('lastMeeting').value = document.getElementById('reportDate').value; document.getElementById('lastMeetingDiv').style.display='none'; }
+  else { document.getElementById('lastMeetingDiv').style.display='block'; }
 }
 
-function next(p) {
-  if(p === 1) {
-    if(!g('advisorName')) { toast('الرجاء إدخال اسم المرشد'); return; }
-    if(!g('reportDate'))  { toast('الرجاء اختيار تاريخ التقرير'); return; }
+function toggleRent(){ var val=document.getElementById('ownership').value; document.getElementById('rentDiv').classList.toggle('on', val==='إيجار'); }
+
+function toggleSocial(){
+  var on=document.getElementById('hasSocial').checked;
+  document.getElementById('socialLbl').textContent = on ? 'نعم / Yes' : 'لا / No';
+  document.getElementById('socialDiv').classList.toggle('on', on);
+}
+
+function toggleChk(type){
+  var cb=document.getElementById('sup-'+type);
+  cb.checked = !cb.checked;
+  document.getElementById('chk-'+type).classList.toggle('on', cb.checked);
+  if(type==='other') document.getElementById('otherSupportDiv').classList.toggle('on', cb.checked);
+}
+
+function updTrack(){ document.getElementById('trackLbl').textContent = document.getElementById('onTrack').checked ? 'نعم / Yes' : 'لا / No'; }
+function clearSaved(){ localStorage.removeItem('fdp_name'); document.getElementById('advisorName').value=''; document.getElementById('savedBanner').classList.remove('on'); }
+function g(id){ return document.getElementById(id).value.trim(); }
+
+function toast(msg){ document.getElementById('tmsg').textContent=msg; var t=document.getElementById('toast'); t.classList.add('on'); setTimeout(function(){ t.classList.remove('on'); },3000); }
+
+function next(p){
+  if(p===1){
+    if(!g('advisorName')){ toast('الرجاء إدخال اسم المرشد'); return; }
+    if(!currency){ toast('الرجاء اختيار العملة'); return; }
+    if(!g('reportDate')){ toast('الرجاء اختيار تاريخ التقرير'); return; }
     localStorage.setItem('fdp_name', g('advisorName'));
   }
-  if(p === 2) {
-    if(!g('familyCode'))    { toast('الرجاء إدخال كود العائلة'); return; }
-    if(!g('beneficiary'))   { toast('الرجاء إدخال اسم المستفيد'); return; }
-    if(!g('projectName'))   { toast('الرجاء إدخال اسم المشروع'); return; }
-    if(!g('projectType'))   { toast('الرجاء إدخال نوع المشروع'); return; }
-    if(!g('projectCity'))   { toast('الرجاء إدخال المنطقة'); return; }
-    if(!g('fundingAmount')) { toast('الرجاء إدخال مبلغ التمويل'); return; }
-    if(!g('statusBefore'))  { toast('الرجاء اختيار حالة المشروع قبل التمويل'); return; }
-    if(!g('statusNow'))     { toast('الرجاء اختيار الحالة الحالية'); return; }
-    if(!g('ownership'))     { toast('الرجاء اختيار حالة الملكية'); return; }
+  if(p===2){
+    if(!g('familyCode')){ toast('الرجاء إدخال كود العائلة'); return; }
+    if(!g('beneficiaryId')){ toast('الرجاء إدخال رقم هوية المستفيد'); return; }
+    if(!g('beneficiary')){ toast('الرجاء إدخال اسم المستفيد'); return; }
+    if(!g('beneficiaryPhone')){ toast('الرجاء إدخال رقم الهاتف'); return; }
+    if(!g('governorate')){ toast('الرجاء اختيار المحافظة'); return; }
+    if(!g('projectCity')){ toast('الرجاء إدخال المدينة'); return; }
+    if(!g('projectName')){ toast('الرجاء إدخال اسم المشروع'); return; }
+    if(!g('projectType')){ toast('الرجاء إدخال نوع المشروع'); return; }
+    if(!g('fundingYear')){ toast('الرجاء إدخال سنة التمويل'); return; }
+    if(!g('fundingInstallments')){ toast('الرجاء إدخال عدد الدفعات'); return; }
+    if(!g('fundingAmount')){ toast('الرجاء إدخال مبلغ التمويل'); return; }
+    if(!g('statusBefore')){ toast('الرجاء اختيار حالة المشروع قبل التمويل'); return; }
+    if(!g('statusNow')){ toast('الرجاء اختيار الحالة الحالية'); return; }
+    if(!g('ownership')){ toast('الرجاء اختيار حالة الملكية'); return; }
   }
-  if(p === 3) {
-    if(!g('repayStatus')) { toast('الرجاء اختيار حالة الالتزام بالسداد'); return; }
-  }
-  if(p === 4) {
-    if(!g('recommendation')) { toast('الرجاء اختيار توصية المرشد'); return; }
-    buildPreview();
-  }
-  showPage(p + 1);
+  if(p===3){ if(!g('repayStatus')){ toast('الرجاء اختيار الالتزام بالسداد'); return; } }
+  if(p===4){ if(!g('recommendation')){ toast('الرجاء اختيار توصية المرشد'); return; } buildPreview(); }
+  showPage(p+1);
 }
 
-function prev(p) { showPage(p - 1); }
+function prev(p){ showPage(p-1); }
 
-function showPage(n) {
-  document.getElementById('pg' + cur).classList.remove('on');
-  document.getElementById('s' + cur).classList.remove('on');
-  document.getElementById('s' + cur).classList.add('dn');
-  for(var i = 1; i <= 4; i++) {
-    document.getElementById('l' + i).classList.toggle('dn', i < n);
-  }
-  cur = n;
-  document.getElementById('pg' + n).classList.add('on');
-  document.getElementById('s' + n).classList.remove('dn');
-  document.getElementById('s' + n).classList.add('on');
-  window.scrollTo(0, 0);
+function showPage(n){
+  document.getElementById('pg'+cur).classList.remove('on');
+  document.getElementById('s'+cur).classList.remove('on');
+  document.getElementById('s'+cur).classList.add('dn');
+  for(var i=1;i<=4;i++) document.getElementById('l'+i).classList.toggle('dn', i<n);
+  cur=n;
+  document.getElementById('pg'+n).classList.add('on');
+  document.getElementById('s'+n).classList.remove('dn');
+  document.getElementById('s'+n).classList.add('on');
+  window.scrollTo(0,0);
 }
 
-function toggleRent() {
-  var val = document.getElementById('ownership').value;
-  document.getElementById('rentDiv').classList.toggle('on', val === 'إيجار / Rented');
+function fd(d){ if(!d) return '—'; return new Date(d).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'}); }
+
+function getSocialTypes(){
+  var t=[];
+  if(document.getElementById('sup-edu').checked) t.push('تعليمي');
+  if(document.getElementById('sup-health').checked) t.push('صحي');
+  if(document.getElementById('sup-housing').checked) t.push('سكني');
+  if(document.getElementById('sup-other').checked) t.push('أخرى: '+(g('otherSupport')||''));
+  return t.join(' - ')||'—';
 }
 
-function updTrack() {
-  var on = document.getElementById('onTrack').checked;
-  document.getElementById('trackLbl').textContent = on ? 'نعم / Yes' : 'لا / No';
-}
-
-function clearSaved() {
-  localStorage.removeItem('fdp_name');
-  document.getElementById('advisorName').value = '';
-  document.getElementById('savedBanner').classList.remove('on');
-}
-
-function fd(d) {
-  if(!d) return '—';
-  return new Date(d).toLocaleDateString('ar-SA', {year:'numeric', month:'short', day:'numeric'});
-}
-
-function buildPreview() {
-  var onTrack = document.getElementById('onTrack').checked;
-  var rent = document.getElementById('ownership').value === 'إيجار / Rented' && g('rentValue') ? ' — ' + g('rentValue') + ' $' : '';
-  var rows = [
-    ['المرشد', 'معلومات المرشد · Advisor', null],
-    ['اسم المرشد / Name', g('advisorName'), null],
-    ['تاريخ التقرير / Date', fd(g('reportDate')), null],
-    ['آخر لقاء / Last Meeting', fd(g('lastMeeting')), null],
-    ['المتابعة القادمة / Next F-U', fd(g('nextFollowup')), null],
-    ['المشروع', 'معلومات المشروع · Project', null],
-    ['كود العائلة / Family Code', g('familyCode'), null],
-    ['اسم المستفيد / Beneficiary', g('beneficiary'), null],
-    ['اسم المشروع / Project', g('projectName'), null],
-    ['نوع المشروع / Type', g('projectType'), null],
-    ['المنطقة / City', g('projectCity'), null],
-    ['مبلغ التمويل / Funding', g('fundingAmount') ? g('fundingAmount') + ' $' : '—', null],
-    ['رأس المال / Capital', g('currentCapital') ? g('currentCapital') + ' $' : '—', null],
-    ['أفراد الأسرة / Family', g('familyMembers') || '—', null],
-    ['الموظفين / Employees', g('empCount') || '—', null],
-    ['الحالة', 'حالة المشروع · Status', null],
-    ['قبل التمويل / Before', g('statusBefore') || '—', null],
-    ['حالياً / Current', g('statusNow') || '—', null],
-    ['الملكية / Ownership', (g('ownership') || '—') + rent, null],
-    ['الأداء', 'الأداء · Performance', null],
-    ['الدخل / Income', g('monthlyIncome') ? g('monthlyIncome') + ' $' : '—', null],
-    ['تحقيق الأهداف / Goals', g('goalPct') ? g('goalPct') + '%' : '—', null],
-    ['وفق الخطة / On Track', onTrack ? '<span class="bg">نعم / Yes ✅</span>' : '<span class="br">لا / No ❌</span>', true],
-    ['دفعات منجزة / Paid', g('paidInst') || '—', null],
-    ['دفعات متبقية / Remaining', g('remInst') || '—', null],
-    ['الالتزام / Commitment', g('repayStatus') || '—', null],
-    ['التقييم', 'التقييم · Evaluation', null],
-    ['التحديات / Challenges', g('challenges') || '—', null],
-    ['الدعم / Support', g('supportNeeded') || '—', null],
-    ['التوصية / Recommendation', g('recommendation') || '—', null],
-    ['ملاحظات / Notes', g('extraNotes') || '—', null],
+function buildPreview(){
+  var onTrack=document.getElementById('onTrack').checked;
+  var isFirst=document.getElementById('firstVisit').checked;
+  var hasSocial=document.getElementById('hasSocial').checked;
+  var rent=document.getElementById('ownership').value==='إيجار'&&g('rentValue') ? g('rentValue')+' '+currency : '';
+  var secs=[
+    {t:'معلومات المرشد · Advisor',r:[
+      ['اسم المرشد / Advisor',g('advisorName')],['العملة / Currency',currency],
+      ['تاريخ التقرير / Date',fd(g('reportDate'))],['أول متابعة / First',isFirst?'<span class="badge bg">نعم</span>':'<span class="badge br">لا</span>'],
+      ['آخر متابعة / Last',fd(g('lastMeeting'))],['المتابعة القادمة / Next',fd(g('nextFollowup'))],
+    ]},
+    {t:'معلومات المشروع · Project',r:[
+      ['كود العائلة / Code',g('familyCode')],['رقم الهوية / ID',g('beneficiaryId')],
+      ['اسم المستفيد / Name',g('beneficiary')],['الهاتف / Phone',g('beneficiaryPhone')],
+      ['المحافظة / Gov.',g('governorate')],['المدينة / City',g('projectCity')],
+      ['المرشد السابق / Prev.',g('prevAdvisor')||'—'],['اسم المشروع / Project',g('projectName')],
+      ['نوع المشروع / Type',g('projectType')],['سنة التمويل / Year',g('fundingYear')],
+      ['عدد الدفعات / Inst.',g('fundingInstallments')],['مبلغ التمويل / Funding',g('fundingAmount')?g('fundingAmount')+' '+currency:'—'],
+      ['رأس المال / Capital',g('currentCapital')?g('currentCapital')+' '+currency:'—'],
+      ['أفراد الأسرة / Family',g('familyMembers')||'—'],['العمال الدائمين / Workers',g('empCount')||'—'],
+    ]},
+    {t:'حالة المشروع · Status',r:[
+      ['قبل التمويل / Before',g('statusBefore')||'—'],['حالياً / Current',g('statusNow')||'—'],
+      ['الملكية / Ownership',(g('ownership')||'—')+(rent?' — '+rent:'')],
+      ['دعم اجتماعي / Social',hasSocial?getSocialTypes():'لا / No'],
+      ['قيمة الدعم / Value',hasSocial&&g('socialValue')?g('socialValue')+' '+currency:'—'],
+    ]},
+    {t:'الأداء · Performance',r:[
+      ['الدخل / Income',g('monthlyIncome')?g('monthlyIncome')+' '+currency:'—'],
+      ['تغطية النفقات / Coverage',g('incomeCoverage')||'—'],
+      ['وفق الخطة / On Track',onTrack?'<span class="badge bg">نعم ✅</span>':'<span class="badge br">لا ❌</span>'],
+      ['دفعات منجزة / Paid',g('paidInst')||'—'],['دفعات متبقية / Rem.',g('remInst')||'—'],
+      ['الالتزام / Commitment',g('repayStatus')||'—'],
+    ]},
+    {t:'التقييم · Evaluation',r:[
+      ['التحديات / Challenges',g('challenges')||'—'],['الدعم / Support',g('supportNeeded')||'—'],
+      ['التوصية / Rec.',g('recommendation')||'—'],['ملاحظات / Notes',g('extraNotes')||'—'],
+    ]},
   ];
-
-  var html = '';
-  var sections = ['المرشد', 'المشروع', 'الحالة', 'الأداء', 'التقييم'];
-  rows.forEach(function(r) {
-    if(sections.indexOf(r[0]) !== -1) {
-      html += '<div class="psec">' + r[1] + '</div>';
-    } else {
-      html += '<div class="prow"><div class="pk">' + r[0] + '</div><div class="pv">' + r[1] + '</div></div>';
-    }
+  var html='';
+  secs.forEach(function(sec){
+    html+='<div class="psec">'+sec.t+'</div>';
+    sec.r.forEach(function(r){ html+='<div class="prow"><div class="pk">'+r[0]+'</div><div class="pv">'+r[1]+'</div></div>'; });
   });
-  document.getElementById('preview').innerHTML = html;
+  document.getElementById('preview').innerHTML=html;
 }
 
-function sendReport() {
-  var onTrack = document.getElementById('onTrack').checked;
-  var btn = document.getElementById('sendBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spin"></div><span>جارٍ التجهيز...</span>';
-  var rent = document.getElementById('ownership').value === 'إيجار / Rented' && g('rentValue') ? ' — ' + g('rentValue') + ' $' : '';
+function sendReport(){
+  var onTrack=document.getElementById('onTrack').checked;
+  var isFirst=document.getElementById('firstVisit').checked;
+  var hasSocial=document.getElementById('hasSocial').checked;
+  var btn=document.getElementById('sendBtn');
+  btn.disabled=true;
+  btn.innerHTML='<div class="spin"></div><span>جارٍ الحفظ...</span>';
+  var rent=document.getElementById('ownership').value==='إيجار'&&g('rentValue')?g('rentValue')+' '+currency:'غير محدد';
 
-  var subject = encodeURIComponent('[متابعة FDP] ' + g('projectName') + ' — ' + g('beneficiary') + ' — ' + g('advisorName'));
-  var body = encodeURIComponent(
-'══════════════════════════════════\n' +
-'        تقرير متابعة FDP\n' +
-'══════════════════════════════════\n\n' +
-'── معلومات المرشد / Advisor ───────\n' +
-'اسم المرشد / Name:          ' + g('advisorName') + '\n' +
-'تاريخ التقرير / Date:       ' + fd(g('reportDate')) + '\n' +
-'آخر لقاء / Last Meeting:    ' + fd(g('lastMeeting')) + '\n' +
-'المتابعة القادمة / Next F-U: ' + fd(g('nextFollowup')) + '\n\n' +
-'── معلومات المشروع / Project ──────\n' +
-'كود العائلة / Family Code:  ' + g('familyCode') + '\n' +
-'اسم المستفيد / Beneficiary: ' + g('beneficiary') + '\n' +
-'اسم المشروع / Project:      ' + g('projectName') + '\n' +
-'نوع المشروع / Type:         ' + g('projectType') + '\n' +
-'المنطقة / City:             ' + g('projectCity') + '\n' +
-'مبلغ التمويل / Funding:     ' + (g('fundingAmount') ? g('fundingAmount') + ' $' : 'غير محدد') + '\n' +
-'رأس المال / Capital:        ' + (g('currentCapital') ? g('currentCapital') + ' $' : 'غير محدد') + '\n' +
-'أفراد الأسرة / Family:      ' + (g('familyMembers') || 'غير محدد') + '\n' +
-'الموظفين / Employees:       ' + (g('empCount') || 'غير محدد') + '\n\n' +
-'── حالة المشروع / Status ──────────\n' +
-'قبل التمويل / Before:  ' + (g('statusBefore') || '—') + '\n' +
-'حالياً / Current:      ' + (g('statusNow') || '—') + '\n' +
-'الملكية / Ownership:   ' + (g('ownership') || '—') + rent + '\n\n' +
-'── الأداء / Performance ───────────\n' +
-'الدخل الشهري / Income:          ' + (g('monthlyIncome') ? g('monthlyIncome') + ' $' : 'غير محدد') + '\n' +
-'تحقيق الأهداف / Goals:          ' + (g('goalPct') ? g('goalPct') + '%' : 'غير محدد') + '\n' +
-'وفق الخطة / On Track:           ' + (onTrack ? 'نعم / Yes ✅' : 'لا / No ❌') + '\n' +
-'دفعات منجزة / Paid:             ' + (g('paidInst') || 'غير محدد') + '\n' +
-'دفعات متبقية / Remaining:       ' + (g('remInst') || 'غير محدد') + '\n' +
-'الالتزام بالسداد / Commitment:  ' + (g('repayStatus') || '—') + '\n\n' +
-'── التقييم / Evaluation ───────────\n' +
-'التحديات / Challenges:\n' + (g('challenges') || 'لا يوجد') + '\n\n' +
-'الدعم المطلوب / Support:\n' + (g('supportNeeded') || 'لا يوجد') + '\n\n' +
-'توصية المرشد / Recommendation:\n' + (g('recommendation') || '—') + '\n\n' +
-'ملاحظات / Notes:\n' + (g('extraNotes') || 'لا يوجد') + '\n\n' +
-'══════════════════════════════════\n' +
-'أُرسل عبر تطبيق متابعة FDP v4.0\n'
+  // Save to Google Sheets
+  if(SHEETS_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL'){
+    var data={
+      timestamp:new Date().toISOString(),advisorName:g('advisorName'),currency:currency,
+      reportDate:g('reportDate'),firstVisit:isFirst?'نعم':'لا',lastMeeting:g('lastMeeting'),
+      nextFollowup:g('nextFollowup'),familyCode:g('familyCode'),beneficiaryId:g('beneficiaryId'),
+      beneficiaryName:g('beneficiary'),beneficiaryPhone:g('beneficiaryPhone'),
+      governorate:g('governorate'),city:g('projectCity'),prevAdvisor:g('prevAdvisor'),
+      projectName:g('projectName'),projectType:g('projectType'),fundingYear:g('fundingYear'),
+      fundingInstallments:g('fundingInstallments'),fundingAmount:g('fundingAmount'),
+      currentCapital:g('currentCapital'),familyMembers:g('familyMembers'),employees:g('empCount'),
+      statusBefore:g('statusBefore'),statusNow:g('statusNow'),ownership:g('ownership'),
+      rentValue:g('rentValue'),hasSocialSupport:hasSocial?'نعم':'لا',
+      socialSupportType:hasSocial?getSocialTypes():'',socialSupportValue:hasSocial?g('socialValue'):'',
+      monthlyIncome:g('monthlyIncome'),incomeCoverage:g('incomeCoverage'),onTrack:onTrack?'نعم':'لا',
+      paidInstallments:g('paidInst'),remainingInstallments:g('remInst'),repaymentStatus:g('repayStatus'),
+      challenges:g('challenges'),supportNeeded:g('supportNeeded'),recommendation:g('recommendation'),notes:g('extraNotes')
+    };
+    fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){});
+  }
+
+  var subject=encodeURIComponent('[متابعة FDP] '+g('projectName')+' — '+g('beneficiary')+' — '+g('advisorName'));
+  var body=encodeURIComponent(
+'══════════════════════════════════\n        تقرير متابعة FDP v5\n══════════════════════════════════\n\n'+
+'── معلومات المرشد ─────────────────\n'+
+'اسم المرشد:          '+g('advisorName')+'\nالعملة:              '+currency+'\nتاريخ التقرير:       '+fd(g('reportDate'))+'\n'+
+'أول متابعة:          '+(isFirst?'نعم':'لا')+'\nآخر متابعة سابقة:   '+fd(g('lastMeeting'))+'\nالمتابعة القادمة:   '+fd(g('nextFollowup'))+'\n\n'+
+'── معلومات المشروع ────────────────\n'+
+'كود العائلة:         '+g('familyCode')+'\nرقم هوية المستفيد:  '+g('beneficiaryId')+'\n'+
+'اسم المستفيد:        '+g('beneficiary')+'\nرقم الهاتف:         '+g('beneficiaryPhone')+'\n'+
+'المحافظة:            '+g('governorate')+'\nالمدينة / المنطقة:  '+g('projectCity')+'\n'+
+'المرشد السابق:       '+(g('prevAdvisor')||'لا يوجد')+'\nاسم المشروع:        '+g('projectName')+'\n'+
+'نوع المشروع:         '+g('projectType')+'\nسنة التمويل:        '+g('fundingYear')+'\n'+
+'عدد دفعات التمويل:  '+g('fundingInstallments')+'\nمبلغ التمويل:       '+(g('fundingAmount')?g('fundingAmount')+' '+currency:'غير محدد')+'\n'+
+'رأس المال الحالي:   '+(g('currentCapital')?g('currentCapital')+' '+currency:'غير محدد')+'\n'+
+'أفراد الأسرة:        '+(g('familyMembers')||'غير محدد')+'\nالعمال الدائمين:    '+(g('empCount')||'غير محدد')+'\n\n'+
+'── حالة المشروع ───────────────────\n'+
+'قبل التمويل:         '+(g('statusBefore')||'—')+'\nحالياً:             '+(g('statusNow')||'—')+'\n'+
+'الملكية:             '+(g('ownership')||'—')+'\nقيمة الإيجار:       '+rent+'\n'+
+'دعم اجتماعي:         '+(hasSocial?'نعم':'لا')+'\n'+
+(hasSocial?'نوع الدعم:          '+getSocialTypes()+'\n':'')+
+(hasSocial&&g('socialValue')?'قيمة الدعم:         '+g('socialValue')+' '+currency+'\n':'')+
+'\n── الأداء ─────────────────────────\n'+
+'الدخل الشهري:        '+(g('monthlyIncome')?g('monthlyIncome')+' '+currency:'غير محدد')+'\n'+
+'تغطية نفقات الأسرة: '+(g('incomeCoverage')||'—')+'\n'+
+'وفق الخطة:           '+(onTrack?'نعم ✅':'لا ❌')+'\n'+
+'دفعات منجزة:         '+(g('paidInst')||'غير محدد')+'\nدفعات متبقية:       '+(g('remInst')||'غير محدد')+'\n'+
+'الالتزام بالسداد:   '+(g('repayStatus')||'—')+'\n\n'+
+'── التقييم ────────────────────────\n'+
+'التحديات:\n'+(g('challenges')||'لا يوجد')+'\n\nالدعم المطلوب:\n'+(g('supportNeeded')||'لا يوجد')+'\n\n'+
+'توصية المرشد:\n'+(g('recommendation')||'—')+'\n\nملاحظات:\n'+(g('extraNotes')||'لا يوجد')+'\n\n'+
+'══════════════════════════════════\nأُرسل عبر تطبيق متابعة FDP v5.0\n'
   );
 
-  setTimeout(function() {
-    window.location.href = 'mailto:ali.mohammad00.a@gmail.com?subject=' + subject + '&body=' + body;
-    setTimeout(function() {
-      document.getElementById('steps').style.display = 'none';
-      for(var i = 1; i <= 5; i++) document.getElementById('pg' + i).classList.remove('on');
+  setTimeout(function(){
+    window.location.href='mailto:ali.mohammad00.a@gmail.com?subject='+subject+'&body='+body;
+    setTimeout(function(){
+      document.getElementById('steps').style.display='none';
+      for(var i=1;i<=5;i++) document.getElementById('pg'+i).classList.remove('on');
       document.getElementById('spage').classList.add('on');
-    }, 1000);
-  }, 600);
+    },1000);
+  },800);
 }
 
-function resetAll() {
-  var ids = ['advisorName','reportDate','lastMeeting','nextFollowup','familyCode','beneficiary',
-    'projectName','projectType','projectCity','fundingAmount','currentCapital','familyMembers',
-    'empCount','statusBefore','statusNow','ownership','rentValue','monthlyIncome','goalPct',
-    'paidInst','remInst','repayStatus','challenges','supportNeeded','recommendation','extraNotes'];
-  ids.forEach(function(id){ var el = document.getElementById(id); if(el) el.value = ''; });
-  document.getElementById('reportDate').value = TODAY;
-  document.getElementById('onTrack').checked = false;
-  document.getElementById('trackLbl').textContent = 'لا / No';
-  document.getElementById('rentDiv').classList.remove('on');
-  document.getElementById('spage').classList.remove('on');
-  document.getElementById('steps').style.display = 'flex';
-  var btn = document.getElementById('sendBtn');
-  btn.disabled = false;
-  btn.innerHTML = '<span>📤</span><span>إرسال التقرير</span>';
-  cur = 1;
-  for(var i = 1; i <= 5; i++) {
-    document.getElementById('s' + i).classList.remove('on','dn');
-    if(i <= 4) document.getElementById('l' + i).classList.remove('dn');
-  }
-  document.getElementById('pg1').classList.add('on');
-  document.getElementById('s1').classList.add('on');
-  window.scrollTo(0, 0);
+function resetAll(){
+  var ids=['advisorName','reportDate','lastMeeting','nextFollowup','familyCode','beneficiaryId',
+    'beneficiary','beneficiaryPhone','governorate','projectCity','prevAdvisor','projectName',
+    'projectType','fundingYear','fundingInstallments','fundingAmount','currentCapital',
+    'familyMembers','empCount','statusBefore','statusNow','ownership','rentValue',
+    'monthlyIncome','incomeCoverage','paidInst','remInst','repayStatus','challenges',
+    'supportNeeded','recommendation','extraNotes','otherSupport','socialValue'];
+  ids.forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('reportDate').value=TODAY;
+  document.getElementById('onTrack').checked=false; document.getElementById('trackLbl').textContent='لا / No';
+  document.getElementById('firstVisit').checked=false; document.getElementById('firstVisitLbl').textContent='لا';
+  document.getElementById('lastMeetingDiv').style.display='block';
+  document.getElementById('hasSocial').checked=false; document.getElementById('socialLbl').textContent='لا / No';
+  document.getElementById('socialDiv').classList.remove('on'); document.getElementById('rentDiv').classList.remove('on');
+  document.getElementById('otherSupportDiv').classList.remove('on');
+  ['edu','health','housing','other'].forEach(function(t){ document.getElementById('sup-'+t).checked=false; document.getElementById('chk-'+t).classList.remove('on'); });
+  ['c1','c2','c3'].forEach(function(id){ document.getElementById(id).classList.remove('on'); });
+  ['suf1','suf2','suf3','suf4','suf5'].forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent='...'; });
+  currency='';
+  document.getElementById('spage').classList.remove('on'); document.getElementById('steps').style.display='flex';
+  var btn=document.getElementById('sendBtn'); btn.disabled=false; btn.innerHTML='<span>📤</span><span>إرسال وحفظ</span>';
+  cur=1;
+  for(var i=1;i<=5;i++){ document.getElementById('s'+i).classList.remove('on','dn'); if(i<=4) document.getElementById('l'+i).classList.remove('dn'); }
+  document.getElementById('pg1').classList.add('on'); document.getElementById('s1').classList.add('on');
+  window.scrollTo(0,0);
 }
 </script>
 </body>
