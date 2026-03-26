@@ -452,7 +452,7 @@ select option { background:var(--surface2); }
     <div class="ct">وجهة الإرسال · Destination</div>
     <div class="dest">
       <div class="dico">✉️</div>
-      <div><div class="dlbl">سيُرسل إلى · Email</div><div class="deml">ali.mohammad00.a@gmail.com</div></div>
+      <div><div class="dlbl">سيُرسل إلى · Email</div><div class="deml"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a5c4c9cc8bc8cacdc4c8c8c4c195958bc4e5c2c8c4ccc98bc6cac8">[email&#160;protected]</a></div></div>
     </div>
     <div class="dest" style="margin-top:8px;">
       <div class="dico">📊</div>
@@ -479,8 +479,8 @@ select option { background:var(--surface2); }
 
 <div class="toast" id="toast"><span>⚠️</span> <span id="tmsg"></span></div>
 
-<script>
-var SHEETS_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwJYPb_k5s5jJxonaoFaQ-Etb6IAD_5AOJ_zBRz1h5oV_h5rAkYQ-hI79BMO6yhcjks/exec';
 var cur = 1;
 var TODAY = new Date().toISOString().split('T')[0];
 var currency = '';
@@ -718,10 +718,4 @@ function resetAll(){
   document.getElementById('spage').classList.remove('on'); document.getElementById('steps').style.display='flex';
   var btn=document.getElementById('sendBtn'); btn.disabled=false; btn.innerHTML='<span>📤</span><span>إرسال وحفظ</span>';
   cur=1;
-  for(var i=1;i<=5;i++){ document.getElementById('s'+i).classList.remove('on','dn'); if(i<=4) document.getElementById('l'+i).classList.remove('dn'); }
-  document.getElementById('pg1').classList.add('on'); document.getElementById('s1').classList.add('on');
-  window.scrollTo(0,0);
-}
-</script>
-</body>
-</html>
+  for(var i=1;i<=5;i++){ document.getElementById('s'+i).classList.remov
