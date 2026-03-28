@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم FDP</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0d1117;--sur:#161b22;--sur2:#1c2330;--bdr:#30363d;
+  --acc:#2ea44f;--acc2:#3fb950;--glow:rgba(46,164,79,0.2);
+  --txt:#e6edf3;--mut:#8b949e;--red:#f85149;--yellow:#d29922;--blue:#388bfd;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;}
+
+/* Login */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.login-box{background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:36px 28px;width:100%;max-width:360px;text-align:center;}
+.login-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--acc),#1a7f37);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;}
+.login-box h1{font-size:20px;font-weight:900;margin-bottom:4px;}
+.login-box p{font-size:12px;color:var(--mut);font-family:'Tajawal',sans-serif;margin-bottom:24px;}
+.login-box input{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:11px 14px;color:var(--txt);font-family:'Cairo',sans-serif;font-size:14px;outline:none;text-align:center;letter-spacing:3px;margin-bottom:12px;}
+.login-box input:focus{border-color:var(--acc);}
+.login-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--acc),#1a7f37);color:#fff;border:none;border-radius:9px;font-size:15px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;}
+.login-err{color:var(--red);font-size:12px;font-family:'Tajawal',sans-serif;margin-top:8px;display:none;}
+
+/* Dashboard */
+.dash{display:none;}
+
+/* Topbar */
+.topbar{background:var(--sur);border-bottom:1px solid var(--bdr);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.tlogo{width:34px;height:34px;background:linear-gradient(135deg,var(--acc),#1a7f37);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.topbar h1{font-size:15px;font-weight:900;}
+.topbar p{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.last-upd{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.refresh-btn{background:rgba(46,164,79,.1);border:1px solid rgba(46,164,79,.25);border-radius:7px;padding:6px 12px;color:var(--acc2);font-size:11px;font-family:'Tajawal',sans-serif;cursor:pointer;}
+.logout-btn{background:var(--sur2);border:1px solid var(--bdr);border-radius:7px;padding:6px 12px;color:var(--mut);font-size:11px;font-family:'Tajawal',sans-serif;cursor:pointer;}
+
+/* Main content */
+.main{padding:16px 16px 32px;max-width:1200px;margin:0 auto;}
+
+/* Loading */
+.loading{text-align:center;padding:60px 20px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.spin{width:32px;height:32px;border:3px solid var(--bdr);border-top-color:var(--acc);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 12px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* Stats grid */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr);}}
+.stat-card{background:var(--sur);border:1px solid var(--bdr);border-radius:11px;padding:14px;text-align:center;}
+.stat-icon{font-size:22px;margin-bottom:6px;}
+.stat-num{font-size:24px;font-weight:900;line-height:1;}
+.stat-lbl{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;margin-top:3px;}
+.stat-card.green .stat-num{color:var(--acc2);}
+.stat-card.red .stat-num{color:var(--red);}
+.stat-card.yellow .stat-num{color:var(--yellow);}
+.stat-card.blue .stat-num{color:var(--blue);}
+
+/* Section title */
+.sec-title{font-size:12px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;font-family:'Tajawal',sans-serif;}
+.sec-title::before{content:'';width:3px;height:12px;background:var(--acc);border-radius:2px;}
+
+/* Charts grid */
+.charts{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px;}
+@media(min-width:700px){.charts{grid-template-columns:1fr 1fr;}}
+.chart-card{background:var(--sur);border:1px solid var(--bdr);border-radius:11px;padding:14px;}
+.chart-card h3{font-size:12px;font-weight:700;color:var(--mut);font-family:'Tajawal',sans-serif;margin-bottom:12px;}
+.chart-wrap{position:relative;height:200px;}
+
+/* Alerts */
+.alerts-wrap{margin-bottom:16px;}
+.alert-item{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;}
+.alert-item.urgent{border-color:rgba(248,81,73,.4);background:rgba(248,81,73,.05);}
+.alert-item.warning{border-color:rgba(210,153,34,.4);background:rgba(210,153,34,.05);}
+.alert-item.info{border-color:rgba(56,139,253,.3);background:rgba(56,139,253,.04);}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.alert-title{font-size:13px;font-weight:700;margin-bottom:2px;}
+.alert-sub{font-size:11px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.alert-badge{display:inline-block;padding:1px 8px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Tajawal',sans-serif;margin-right:auto;flex-shrink:0;}
+.badge-red{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3);}
+.badge-yellow{background:rgba(210,153,34,.15);color:var(--yellow);border:1px solid rgba(210,153,34,.3);}
+.badge-blue{background:rgba(56,139,253,.12);color:var(--blue);border:1px solid rgba(56,139,253,.3);}
+.no-alerts{text-align:center;padding:24px;color:var(--mut);font-family:'Tajawal',sans-serif;font-size:13px;background:var(--sur);border:1px solid var(--bdr);border-radius:10px;}
+
+/* Table */
+.table-wrap{background:var(--sur);border:1px solid var(--bdr);border-radius:11px;overflow:hidden;margin-bottom:16px;}
+.table-header{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr);}
+.table-header h3{font-size:12px;font-weight:700;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.search-box{background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:6px 10px;color:var(--txt);font-family:'Cairo',sans-serif;font-size:12px;outline:none;width:160px;}
+.search-box:focus{border-color:var(--acc);}
+.tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.tbl th{background:var(--sur2);padding:8px 10px;text-align:right;font-weight:700;color:var(--mut);font-family:'Tajawal',sans-serif;white-space:nowrap;}
+.tbl td{padding:9px 10px;border-bottom:1px solid rgba(48,54,61,.5);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--sur2);}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Tajawal',sans-serif;white-space:nowrap;}
+.sp-good{background:rgba(46,164,79,.15);color:var(--acc2);}
+.sp-avg{background:rgba(210,153,34,.15);color:var(--yellow);}
+.sp-bad{background:rgba(248,81,73,.12);color:var(--red);}
+.sp-warn{background:rgba(210,153,34,.12);color:var(--yellow);}
+.tbl-scroll{overflow-x:auto;}
+
+/* Gov stats */
+.gov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;}
+@media(min-width:600px){.gov-grid{grid-template-columns:repeat(3,1fr);}}
+.gov-card{background:var(--sur);border:1px solid var(--bdr);border-radius:9px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;}
+.gov-name{font-size:12px;font-weight:600;}
+.gov-count{font-size:18px;font-weight:900;color:var(--acc2);}
+
+/* Advisor table */
+.adv-card{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.adv-name{font-size:13px;font-weight:700;}
+.adv-sub{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.adv-count{font-size:20px;font-weight:900;color:var(--acc2);flex-shrink:0;}
+
+/* Empty state */
+.empty{text-align:center;padding:40px 20px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+
+/* Error */
+.err-box{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.3);border-radius:10px;padding:14px;text-align:center;font-family:'Tajawal',sans-serif;color:var(--red);font-size:13px;}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="login-logo">📊</div>
+    <h1>لوحة تحكم FDP</h1>
+    <p>للمدراء فقط · Managers Only</p>
+    <input type="password" id="pwdInput" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="login-btn" onclick="doLogin()">دخول ←</button>
+    <div class="login-err" id="loginErr">❌ كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div class="dash" id="dash">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="tlogo">📊</div>
+      <div><h1>لوحة تحكم FDP</h1><p>Manager Dashboard</p></div>
+    </div>
+    <div class="topbar-right">
+      <span class="last-upd" id="lastUpd">جارٍ التحميل...</span>
+      <button class="refresh-btn" onclick="loadData()">🔄 تحديث</button>
+      <button class="logout-btn" onclick="doLogout()">خروج</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="loading" id="loadingDiv">
+      <div class="spin"></div>
+      <div>جارٍ تحميل البيانات...</div>
+    </div>
+
+    <div id="dashContent" style="display:none;">
+
+      <!-- Stats -->
+      <div class="stats" id="statsGrid"></div>
+
+      <!-- Alerts -->
+      <div class="alerts-wrap">
+        <div class="sec-title">التنبيهات · Alerts</div>
+        <div id="alertsDiv"></div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts">
+        <div class="chart-card">
+          <h3>📊 حالة المشاريع الحالية</h3>
+          <div class="chart-wrap"><canvas id="statusChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>💰 الالتزام بالسداد</h3>
+          <div class="chart-wrap"><canvas id="repayChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>📈 تغطية نفقات الأسرة</h3>
+          <div class="chart-wrap"><canvas id="coverageChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>🏗️ حالة المشاريع قبل التمويل</h3>
+          <div class="chart-wrap"><canvas id="beforeChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- By Governorate -->
+      <div class="sec-title">المشاريع حسب المحافظة · By Governorate</div>
+      <div class="gov-grid" id="govGrid"></div>
+
+      <!-- By Advisor -->
+      <div class="sec-title" style="margin-top:8px;">التقارير حسب المرشد · By Advisor</div>
+      <div id="advDiv" style="margin-bottom:16px;"></div>
+
+      <!-- All Reports Table -->
+      <div class="table-wrap">
+        <div class="table-header">
+          <h3>📋 جميع التقارير · All Reports</h3>
+          <input type="text" class="search-box" id="searchBox" placeholder="🔍 بحث..." oninput="filterTable()">
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl" id="mainTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>المرشد</th>
+                <th>المستفيد</th>
+                <th>المشروع</th>
+                <th>المحافظة</th>
+                <th>المدينة</th>
+                <th>التاريخ</th>
+                <th>الحالة الحالية</th>
+                <th>السداد</th>
+                <th>التوصية</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- dashContent -->
+  </div><!-- main -->
+</div><!-- dash -->
+
+<script>
+var SHEETS_ID = '1x0DEDgpZbcT9hgW-AxLcgs5YNMxAyjA5jgSBqh7HkY4';
+var PWD = 'ALI#763888';
+var allRows = [];
+var charts = {};
+
+// ══ Login ══
+function doLogin(){
+  var v = document.getElementById('pwdInput').value;
+  if(v === PWD){
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('dash').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+    document.getElementById('pwdInput').value = '';
+  }
+}
+
+function doLogout(){
+  document.getElementById('dash').style.display = 'none';
+  document.getElementById('loginWrap').style.display = 'flex';
+  document.getElementById('pwdInput').value = '';
+}
+
+// ══ Load Data from Google Sheets ══
+function loadData(){
+  document.getElementById('loadingDiv').style.display = 'block';
+  document.getElementById('dashContent').style.display = 'none';
+
+  var url = 'https://docs.google.com/spreadsheets/d/'+SHEETS_ID+'/gviz/tq?tqx=out:json&sheet=Sheet1';
+
+  fetch(url)
+    .then(function(r){ return r.text(); })
+    .then(function(text){
+      var json = JSON.parse(text.substring(47).slice(0,-2));
+      var rows = json.table.rows;
+      var cols = json.table.cols;
+
+      allRows = [];
+      rows.forEach(function(row, idx){
+        if(idx === 0) return; // skip header
+        var r = {};
+        if(row.c){
+          r.timestamp    = getCellVal(row.c[0]);
+          r.advisorName  = getCellVal(row.c[1]);
+          r.currency     = getCellVal(row.c[2]);
+          r.reportDate   = getCellVal(row.c[3]);
+          r.firstVisit   = getCellVal(row.c[4]);
+          r.lastMeeting  = getCellVal(row.c[5]);
+          r.nextFollowup = getCellVal(row.c[6]);
+          r.familyCode   = getCellVal(row.c[7]);
+          r.benId        = getCellVal(row.c[8]);
+          r.benName      = getCellVal(row.c[9]);
+          r.benPhone     = getCellVal(row.c[10]);
+          r.governorate  = getCellVal(row.c[11]);
+          r.city         = getCellVal(row.c[12]);
+          r.prevAdvisor  = getCellVal(row.c[13]);
+          r.projName     = getCellVal(row.c[14]);
+          r.projType     = getCellVal(row.c[15]);
+          r.fundYear     = getCellVal(row.c[16]);
+          r.fundInst     = getCellVal(row.c[17]);
+          r.fundAmt      = getCellVal(row.c[18]);
+          r.capital      = getCellVal(row.c[19]);
+          r.famMembers   = getCellVal(row.c[20]);
+          r.workers      = getCellVal(row.c[21]);
+          r.stBefore     = getCellVal(row.c[22]);
+          r.stNow        = getCellVal(row.c[23]);
+          r.ownership    = getCellVal(row.c[24]);
+          r.rentVal      = getCellVal(row.c[25]);
+          r.hasSocial    = getCellVal(row.c[26]);
+          r.socialType   = getCellVal(row.c[27]);
+          r.socialVal    = getCellVal(row.c[28]);
+          r.income       = getCellVal(row.c[29]);
+          r.coverage     = getCellVal(row.c[30]);
+          r.onTrack      = getCellVal(row.c[31]);
+          r.paidInst     = getCellVal(row.c[32]);
+          r.remInst      = getCellVal(row.c[33]);
+          r.repay        = getCellVal(row.c[34]);
+          r.challenges   = getCellVal(row.c[35]);
+          r.supNeeded    = getCellVal(row.c[36]);
+          r.recom        = getCellVal(row.c[37]);
+          r.notes        = getCellVal(row.c[38]);
+          if(r.benName || r.projName) allRows.push(r);
+        }
+      });
+
+      renderDash();
+      document.getElementById('lastUpd').textContent = 'آخر تحديث: ' + new Date().toLocaleTimeString('ar-SA');
+      document.getElementById('loadingDiv').style.display = 'none';
+      document.getElementById('dashContent').style.display = 'block';
+    })
+    .catch(function(e){
+      document.getElementById('loadingDiv').innerHTML =
+        '<div class="err-box">❌ تعذّر تحميل البيانات<br><small>تأكد من مشاركة Google Sheets للعموم</small><br><br><button class="refresh-btn" onclick="loadData()">إعادة المحاولة</button></div>';
+    });
+}
+
+function getCellVal(c){ return c && c.v !== null && c.v !== undefined ? String(c.v) : ''; }
+
+// ══ Render Dashboard ══
+function renderDash(){
+  renderStats();
+  renderAlerts();
+  renderCharts();
+  renderGov();
+  renderAdvisors();
+  renderTable(allRows);
+}
+
+// ══ Stats ══
+function renderStats(){
+  var total = allRows.length;
+  var urgent = allRows.filter(function(r){ return r.stNow && r.stNow.includes('توقف'); }).length;
+  var struggling = allRows.filter(function(r){ return r.stNow && r.stNow.includes('متعثر'); }).length;
+  var good = allRows.filter(function(r){ return r.stNow && r.stNow.includes('جيد'); }).length;
+  var needsAction = allRows.filter(function(r){ return r.recom && (r.recom.includes('عاجل') || r.recom.includes('مكثفة')); }).length;
+
+  document.getElementById('statsGrid').innerHTML =
+    statCard('📋', total, 'إجمالي التقارير', 'blue') +
+    statCard('💚', good, 'مشاريع بدخل جيد', 'green') +
+    statCard('⚠️', struggling, 'مشاريع متعثرة', 'yellow') +
+    statCard('🚨', needsAction, 'تحتاج تدخلاً', 'red');
+}
+
+function statCard(icon, num, lbl, cls){
+  return '<div class="stat-card '+cls+'"><div class="stat-icon">'+icon+'</div><div class="stat-num">'+num+'</div><div class="stat-lbl">'+lbl+'</div></div>';
+}
+
+// ══ Alerts ══
+function renderAlerts(){
+  var alerts = [];
+  var today = new Date();
+
+  allRows.forEach(function(r){
+    // Urgent projects
+    if(r.stNow && r.stNow.includes('توقف')){
+      alerts.push({type:'urgent', icon:'🔴', title:'مشروع في طريقه للتوقف', sub: r.projName + ' — ' + r.benName + ' (' + r.governorate + ')', badge:'عاجل', badgeCls:'badge-red'});
+    }
+    // Struggling
+    if(r.stNow && r.stNow.includes('متعثر')){
+      alerts.push({type:'warning', icon:'⚠️', title:'مشروع متعثر يحتاج متابعة', sub: r.projName + ' — ' + r.benName + ' (' + r.city + ')', badge:'تنبيه', badgeCls:'badge-yellow'});
+    }
+    // Urgent recommendation
+    if(r.recom && r.recom.includes('عاجل')){
+      alerts.push({type:'urgent', icon:'🚨', title:'المرشد يطلب تدخلاً عاجلاً', sub: r.projName + ' — مرشد: ' + r.advisorName, badge:'عاجل جداً', badgeCls:'badge-red'});
+    }
+    // Late repayment
+    if(r.repay && r.repay.includes('متكرر')){
+      alerts.push({type:'warning', icon:'💸', title:'متأخر بشكل متكرر في السداد', sub: r.benName + ' — ' + r.projName, badge:'سداد', badgeCls:'badge-yellow'});
+    }
+    // Overdue follow-up
+    if(r.nextFollowup){
+      var nextDate = new Date(r.nextFollowup);
+      var diffDays = Math.ceil((nextDate - today) / (1000*60*60*24));
+      if(diffDays < 0){
+        alerts.push({type:'warning', icon:'📅', title:'موعد متابعة متأخر', sub: r.projName + ' — ' + r.benName + ' (منذ ' + Math.abs(diffDays) + ' يوم)', badge:'متأخر', badgeCls:'badge-yellow'});
+      } else if(diffDays <= 3){
+        alerts.push({type:'info', icon:'🔔', title:'موعد متابعة قريب', sub: r.projName + ' — ' + r.benName + ' (خلال ' + diffDays + ' أيام)', badge:'قريب', badgeCls:'badge-blue'});
+      }
+    }
+    // Needs additional funding
+    if(r.recom && r.recom.includes('تمويل')){
+      alerts.push({type:'info', icon:'💰', title:'يُنصح بتمويل إضافي', sub: r.projName + ' — ' + r.benName, badge:'تمويل', badgeCls:'badge-blue'});
+    }
+  });
+
+  if(alerts.length === 0){
+    document.getElementById('alertsDiv').innerHTML = '<div class="no-alerts">✅ لا توجد تنبيهات حالياً · No alerts</div>';
+    return;
+  }
+
+  // Sort: urgent first
+  alerts.sort(function(a,b){ return a.type==='urgent' ? -1 : 1; });
+
+  var html = '';
+  alerts.slice(0,15).forEach(function(a){
+    html += '<div class="alert-item '+a.type+'">';
+    html += '<div class="alert-icon">'+a.icon+'</div>';
+    html += '<div style="flex:1"><div class="alert-title">'+a.title+'</div><div class="alert-sub">'+a.sub+'</div></div>';
+    html += '<span class="alert-badge '+a.badgeCls+'">'+a.badge+'</span>';
+    html += '</div>';
+  });
+
+  if(alerts.length > 15) html += '<div class="alert-item info"><div class="alert-sub" style="text-align:center;width:100%;">+ '+(alerts.length-15)+' تنبيه إضافي</div></div>';
+  document.getElementById('alertsDiv').innerHTML = html;
+}
+
+// ══ Charts ══
+function renderCharts(){
+  // Destroy old charts
+  Object.keys(charts).forEach(function(k){ if(charts[k]) charts[k].destroy(); });
+
+  var chartDefaults = {
+    plugins:{ legend:{ labels:{ color:'#8b949e', font:{family:'Cairo',size:11}, boxWidth:12 }}},
+    maintainAspectRatio: false
+  };
+
+  // Status chart
+  var statusCount = {};
+  allRows.forEach(function(r){ if(r.stNow){ var k=r.stNow.replace(/[🔴🟠🟡🟢💚⚠️]/g,'').trim(); statusCount[k]=(statusCount[k]||0)+1; }});
+  charts.status = new Chart(document.getElementById('statusChart'), {
+    type:'doughnut',
+    data:{ labels:Object.keys(statusCount), datasets:[{ data:Object.values(statusCount), backgroundColor:['#3fb950','#d29922','#f0883e','#f85149','#388bfd'], borderColor:'#161b22', borderWidth:2 }]},
+    options: Object.assign({}, chartDefaults)
+  });
+
+  // Repayment chart
+  var repayCount = {};
+  allRows.forEach(function(r){ if(r.repay){ var k=r.repay.replace(/[✅⚠️❌]/g,'').trim(); repayCount[k]=(repayCount[k]||0)+1; }});
+  charts.repay = new Chart(document.getElementById('repayChart'), {
+    type:'doughnut',
+    data:{ labels:Object.keys(repayCount), datasets:[{ data:Object.values(repayCount), backgroundColor:['#3fb950','#d29922','#f85149'], borderColor:'#161b22', borderWidth:2 }]},
+    options: Object.assign({}, chartDefaults)
+  });
+
+  // Coverage chart
+  var covCount = {};
+  allRows.forEach(function(r){ if(r.coverage){ var k=r.coverage.replace(/[🔴🟠🟡🟢💚✅]/g,'').trim().substring(0,20); covCount[k]=(covCount[k]||0)+1; }});
+  charts.coverage = new Chart(document.getElementById('coverageChart'), {
+    type:'bar',
+    data:{ labels:Object.keys(covCount), datasets:[{ data:Object.values(covCount), backgroundColor:'#2ea44f', borderRadius:6 }]},
+    options: Object.assign({}, chartDefaults, { plugins: Object.assign({}, chartDefaults.plugins, { legend:{display:false}}), scales:{ x:{ticks:{color:'#8b949e',font:{size:9}}}, y:{ticks:{color:'#8b949e',stepSize:1}, grid:{color:'#21262d'}}}})
+  });
+
+  // Before funding chart
+  var befCount = {};
+  allRows.forEach(function(r){ if(r.stBefore){ var k=r.stBefore.replace(/[🆕✅⏸️⚠️]/g,'').trim().substring(0,18); befCount[k]=(befCount[k]||0)+1; }});
+  charts.before = new Chart(document.getElementById('beforeChart'), {
+    type:'bar',
+    data:{ labels:Object.keys(befCount), datasets:[{ data:Object.values(befCount), backgroundColor:'#388bfd', borderRadius:6 }]},
+    options: Object.assign({}, chartDefaults, { plugins: Object.assign({}, chartDefaults.plugins, { legend:{display:false}}), scales:{ x:{ticks:{color:'#8b949e',font:{size:9}}}, y:{ticks:{color:'#8b949e',stepSize:1}, grid:{color:'#21262d'}}}})
+  });
+}
+
+// ══ Governorate ══
+function renderGov(){
+  var govCount = {};
+  allRows.forEach(function(r){ if(r.governorate){ govCount[r.governorate]=(govCount[r.governorate]||0)+1; }});
+  var sorted = Object.entries(govCount).sort(function(a,b){ return b[1]-a[1]; });
+  var html = '';
+  sorted.forEach(function(g){
+    html += '<div class="gov-card"><div class="gov-name">'+g[0]+'</div><div class="gov-count">'+g[1]+'</div></div>';
+  });
+  document.getElementById('govGrid').innerHTML = html || '<div class="empty">لا توجد بيانات</div>';
+}
+
+// ══ Advisors ══
+function renderAdvisors(){
+  var advCount = {};
+  allRows.forEach(function(r){ if(r.advisorName){ advCount[r.advisorName]=(advCount[r.advisorName]||0)+1; }});
+  var sorted = Object.entries(advCount).sort(function(a,b){ return b[1]-a[1]; });
+  var html = '';
+  sorted.forEach(function(a){
+    var urgent = allRows.filter(function(r){ return r.advisorName===a[0] && r.stNow && r.stNow.includes('توقف'); }).length;
+    html += '<div class="adv-card">';
+    html += '<div><div class="adv-name">👤 '+a[0]+'</div><div class="adv-sub">'+a[1]+' تقرير'+(urgent>0?' · 🔴 '+urgent+' عاجل':'')+'</div></div>';
+    html += '<div class="adv-count">'+a[1]+'</div></div>';
+  });
+  document.getElementById('advDiv').innerHTML = html || '<div class="empty">لا توجد بيانات</div>';
+}
+
+// ══ Table ══
+function renderTable(rows){
+  var html = '';
+  rows.forEach(function(r, i){
+    var stClass = r.stNow && r.stNow.includes('جيد') ? 'sp-good' : r.stNow && r.stNow.includes('توقف') ? 'sp-bad' : r.stNow && r.stNow.includes('متعثر') ? 'sp-warn' : 'sp-avg';
+    var repClass = r.repay && r.repay.includes('ملتزم') ? 'sp-good' : r.repay && r.repay.includes('متكرر') ? 'sp-bad' : 'sp-warn';
+    var recomShort = r.recom ? r.recom.substring(0,15)+'...' : '—';
+
+    html += '<tr>';
+    html += '<td style="color:var(--mut);">'+(i+1)+'</td>';
+    html += '<td>'+( r.advisorName||'—')+'</td>';
+    html += '<td><div>'+( r.benName||'—')+'</div><div style="font-size:9px;color:var(--mut);">'+(r.familyCode||'')+'</div></td>';
+    html += '<td>'+( r.projName||'—')+'</td>';
+    html += '<td>'+( r.governorate||'—')+'</td>';
+    html += '<td>'+( r.city||'—')+'</td>';
+    html += '<td style="white-space:nowrap;font-size:10px;">'+( r.reportDate||'—')+'</td>';
+    html += '<td><span class="status-pill '+stClass+'">'+(r.stNow ? r.stNow.substring(0,14) : '—')+'</span></td>';
+    html += '<td><span class="status-pill '+repClass+'">'+(r.repay ? r.repay.substring(0,10) : '—')+'</span></td>';
+    html += '<td style="font-size:10px;">'+( r.recom||'—')+'</td>';
+    html += '</tr>';
+  });
+  document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="10" style="text-align:center;padding:24px;color:var(--mut);">لا توجد بيانات</td></tr>';
+}
+
+// ══ Search ══
+function filterTable(){
+  var q = document.getElementById('searchBox').value.toLowerCase();
+  if(!q){ renderTable(allRows); return; }
+  var filtered = allRows.filter(function(r){
+    return (r.benName||'').toLowerCase().includes(q) ||
+           (r.projName||'').toLowerCase().includes(q) ||
+           (r.advisorName||'').toLowerCase().includes(q) ||
+           (r.governorate||'').toLowerCase().includes(q) ||
+           (r.city||'').toLowerCase().includes(q) ||
+           (r.familyCode||'').toLowerCase().includes(q) ||
+           (r.benId||'').toLowerCase().includes(q);
+  });
+  renderTable(filtered);
+}
+
+// Auto refresh every 5 minutes
+setInterval(function(){
+  if(document.getElementById('dash').style.display !== 'none') loadData();
+}, 300000);
+</script>
+</body>
+</html>
