@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم FDP · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117;--sur:#161b22;--sur2:#1c2330;--bdr:#30363d;
+  --acc:#2ea44f;--acc2:#3fb950;--glow:rgba(46,164,79,0.18);
+  --txt:#e6edf3;--mut:#8b949e;--red:#f85149;--yellow:#d29922;
+  --blue:#388bfd;--orange:#f0883e;--purple:#bc8cff;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;}
+
+/* ── LOGIN ── */
+#loginPage{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.lcard{background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:40px 32px;width:100%;max-width:380px;text-align:center;}
+.llogo{width:68px;height:68px;background:linear-gradient(135deg,var(--acc),#1a7f37);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px;box-shadow:0 0 28px var(--glow);}
+.lcard h1{font-size:22px;font-weight:900;margin-bottom:3px;}
+.lcard .sub{font-size:11px;color:var(--mut);font-family:'Tajawal',sans-serif;margin-bottom:28px;}
+.pw-wrap{position:relative;margin-bottom:14px;}
+.pw-inp{width:100%;background:var(--bg);border:2px solid var(--bdr);border-radius:10px;padding:13px 44px 13px 16px;color:var(--txt);font-size:16px;outline:none;text-align:center;letter-spacing:5px;transition:border-color .2s;}
+.pw-inp:focus{border-color:var(--acc);}
+.pw-eye{position:absolute;left:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--mut);font-size:18px;background:none;border:none;}
+.lbtn{width:100%;padding:14px;background:linear-gradient(135deg,var(--acc),#1a7f37);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px var(--glow);font-family:'Cairo',sans-serif;}
+.lbtn:active{opacity:.9;}
+.lerr{color:var(--red);font-size:12px;font-family:'Tajawal',sans-serif;margin-top:10px;min-height:18px;}
+
+/* ── DASHBOARD ── */
+#dashPage{display:none;}
+
+/* Topbar */
+.topbar{background:var(--sur);border-bottom:1px solid var(--bdr);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;gap:8px;flex-wrap:wrap;}
+.tb-l{display:flex;align-items:center;gap:10px;}
+.tb-logo{width:34px;height:34px;background:linear-gradient(135deg,var(--acc),#1a7f37);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.tb-title{font-size:14px;font-weight:900;line-height:1.1;}
+.tb-sub{font-size:9px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.tb-r{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.updt{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.btn{padding:6px 12px;border-radius:7px;font-size:11px;font-family:'Tajawal',sans-serif;font-weight:700;cursor:pointer;border:1px solid var(--bdr);background:var(--sur2);color:var(--mut);transition:opacity .2s;white-space:nowrap;}
+.btn.g{background:rgba(46,164,79,.1);border-color:rgba(46,164,79,.3);color:var(--acc2);}
+.btn.b{background:rgba(56,139,253,.1);border-color:rgba(56,139,253,.3);color:var(--blue);}
+.btn.r{background:rgba(248,81,73,.1);border-color:rgba(248,81,73,.3);color:var(--red);}
+.btn:active{opacity:.75;}
+
+/* Tabs */
+.tabs{display:flex;background:var(--sur);border-bottom:1px solid var(--bdr);overflow-x:auto;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:11px 16px;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;font-family:'Tajawal',sans-serif;transition:all .2s;}
+.tab.on{color:var(--acc2);border-bottom-color:var(--acc);}
+
+/* Main */
+.main{padding:14px 14px 40px;max-width:1100px;margin:0 auto;}
+
+/* Loading / Error */
+.loading{text-align:center;padding:60px 20px;}
+.spin{width:32px;height:32px;border:3px solid var(--bdr);border-top-color:var(--acc);border-radius:50%;animation:sp .7s linear infinite;margin:0 auto 14px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ltxt{color:var(--mut);font-family:'Tajawal',sans-serif;font-size:13px;}
+.errbox{background:rgba(248,81,73,.06);border:1px solid rgba(248,81,73,.3);border-radius:12px;padding:24px;text-align:center;}
+.errbox h3{color:var(--red);font-size:16px;margin-bottom:8px;}
+.errbox p{color:var(--mut);font-size:12px;font-family:'Tajawal',sans-serif;margin-bottom:16px;line-height:1.6;}
+
+/* Tab pages */
+.tabpage{display:none;}.tabpage.on{display:block;}
+
+/* Section header */
+.sh{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin:0 0 10px;display:flex;align-items:center;gap:6px;font-family:'Tajawal',sans-serif;}
+.sh::before{content:'';width:3px;height:11px;background:var(--acc);border-radius:2px;}
+.sh-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.sh-row .sh{margin-bottom:0;}
+
+/* ── STAT CARDS ── */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:16px;}
+@media(min-width:560px){.stats{grid-template-columns:repeat(4,1fr);}}
+.stat{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:14px 12px;text-align:center;position:relative;overflow:hidden;}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.stat.cg::before{background:var(--acc);}
+.stat.cr::before{background:var(--red);}
+.stat.cy::before{background:var(--yellow);}
+.stat.cb::before{background:var(--blue);}
+.stat.co::before{background:var(--orange);}
+.stat.cp::before{background:var(--purple);}
+.stat-i{font-size:22px;margin-bottom:6px;}
+.stat-n{font-size:28px;font-weight:900;line-height:1;}
+.stat.cg .stat-n{color:var(--acc2);}
+.stat.cr .stat-n{color:var(--red);}
+.stat.cy .stat-n{color:var(--yellow);}
+.stat.cb .stat-n{color:var(--blue);}
+.stat.co .stat-n{color:var(--orange);}
+.stat.cp .stat-n{color:var(--purple);}
+.stat-l{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;margin-top:3px;line-height:1.4;}
+
+/* ── PROGRESS BARS ── */
+.pbar{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.pbar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;gap:8px;}
+.pbar-lbl{font-size:12px;font-weight:600;flex:1;}
+.pbar-sub{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.pbar-val{font-size:13px;font-weight:900;flex-shrink:0;}
+.pbar-bg{background:var(--sur2);border-radius:6px;height:8px;overflow:hidden;}
+.pbar-fill{height:8px;border-radius:6px;transition:width .7s ease;}
+
+/* ── MINI CARDS GRID ── */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+@media(min-width:560px){.mgrid3{grid-template-columns:repeat(3,1fr);}}
+.mcard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.mcard-l .ml{font-size:12px;font-weight:700;}
+.mcard-l .ms{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;margin-top:2px;}
+.mcard-n{font-size:24px;font-weight:900;color:var(--acc2);flex-shrink:0;}
+
+/* ── ALERTS ── */
+.alert{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:background .15s;}
+.alert:active{background:var(--sur2);}
+.alert.urg{border-color:rgba(248,81,73,.4);background:rgba(248,81,73,.04);}
+.alert.wrn{border-color:rgba(210,153,34,.35);background:rgba(210,153,34,.04);}
+.alert.inf{border-color:rgba(56,139,253,.3);background:rgba(56,139,253,.03);}
+.al-i{font-size:18px;flex-shrink:0;margin-top:1px;}
+.al-b{flex:1;min-width:0;}
+.al-t{font-size:12px;font-weight:700;margin-bottom:2px;}
+.al-s{font-size:11px;color:var(--mut);font-family:'Tajawal',sans-serif;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Tajawal',sans-serif;flex-shrink:0;align-self:flex-start;}
+.badge.r{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3);}
+.badge.y{background:rgba(210,153,34,.15);color:var(--yellow);border:1px solid rgba(210,153,34,.3);}
+.badge.b{background:rgba(56,139,253,.12);color:var(--blue);border:1px solid rgba(56,139,253,.3);}
+.badge.g{background:rgba(46,164,79,.15);color:var(--acc2);border:1px solid rgba(46,164,79,.3);}
+.nodata{text-align:center;padding:28px;color:var(--mut);font-family:'Tajawal',sans-serif;font-size:13px;background:var(--sur);border:1px solid var(--bdr);border-radius:10px;}
+
+/* ── TABLE ── */
+.twrap{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;}
+.ttop{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr);gap:8px;flex-wrap:wrap;}
+.ttop h3{font-size:11px;font-weight:700;color:var(--mut);font-family:'Tajawal',sans-serif;white-space:nowrap;}
+.tctrl{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.srch{background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:6px 10px;color:var(--txt);font-size:12px;outline:none;width:140px;font-family:'Cairo',sans-serif;}
+.srch:focus{border-color:var(--acc);}
+.fsel{background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:6px 8px;color:var(--txt);font-size:11px;outline:none;-webkit-appearance:none;cursor:pointer;font-family:'Tajawal',sans-serif;max-width:120px;}
+.tscrl{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+th{background:var(--sur2);padding:9px 10px;text-align:right;font-weight:700;color:var(--mut);font-family:'Tajawal',sans-serif;white-space:nowrap;border-bottom:1px solid var(--bdr);}
+td{padding:9px 10px;border-bottom:1px solid rgba(48,54,61,.5);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(28,35,48,.5);}
+.pill{display:inline-block;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Tajawal',sans-serif;white-space:nowrap;}
+.pill.g{background:rgba(46,164,79,.15);color:var(--acc2);}
+.pill.y{background:rgba(210,153,34,.15);color:var(--yellow);}
+.pill.r{background:rgba(248,81,73,.12);color:var(--red);}
+.pill.b{background:rgba(56,139,253,.12);color:var(--blue);}
+.abtns{display:flex;gap:4px;}
+.abtn{padding:4px 8px;border-radius:5px;font-size:10px;font-family:'Tajawal',sans-serif;font-weight:700;cursor:pointer;border:none;white-space:nowrap;}
+.abtn.v{background:rgba(46,164,79,.12);color:var(--acc2);}
+.abtn.e{background:rgba(56,139,253,.12);color:var(--blue);}
+.abtn.d{background:rgba(248,81,73,.1);color:var(--red);}
+
+/* Pagination */
+.pag{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-top:1px solid var(--bdr);flex-wrap:wrap;gap:8px;}
+.pag-info{font-size:11px;color:var(--mut);font-family:'Tajawal',sans-serif;}
+.pag-btns{display:flex;gap:6px;}
+.pbtn{background:var(--sur2);border:1px solid var(--bdr);border-radius:6px;padding:5px 13px;font-size:11px;cursor:pointer;color:var(--txt);font-family:'Tajawal',sans-serif;}
+.pbtn:disabled{opacity:.35;cursor:not-allowed;}
+
+/* ── MODAL ── */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center;padding:16px;}
+.mbg.show{display:flex;}
+.mbox{background:var(--sur);border:1px solid var(--bdr);border-radius:14px;padding:20px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;}
+.mhdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px;}
+.mhdr h2{font-size:15px;font-weight:900;line-height:1.3;}
+.mclose{background:var(--sur2);border:1px solid var(--bdr);border-radius:7px;min-width:30px;height:30px;cursor:pointer;font-size:15px;color:var(--mut);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.msec{font-size:9px;font-weight:700;color:var(--acc2);font-family:'Tajawal',sans-serif;padding:8px 0 3px;border-bottom:1px solid rgba(46,164,79,.2);margin-bottom:2px;text-transform:uppercase;letter-spacing:.5px;}
+.mrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(48,54,61,.45);gap:10px;}
+.mrow:last-child{border-bottom:none;}
+.mk{font-size:10px;color:var(--mut);font-family:'Tajawal',sans-serif;flex-shrink:0;max-width:44%;line-height:1.4;}
+.mv{font-size:11px;font-weight:600;text-align:left;word-break:break-word;max-width:54%;line-height:1.5;}
+.mactions{display:flex;gap:8px;margin-top:16px;}
+.mactions button{flex:1;padding:11px;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
+.mbtn-e{background:rgba(56,139,253,.15);color:var(--blue);border:1px solid rgba(56,139,253,.3)!important;border:none;}
+.mbtn-d{background:rgba(248,81,73,.12);color:var(--red);border:1px solid rgba(248,81,73,.3)!important;border:none;}
+
+/* Edit/Add form */
+.eform{display:flex;flex-direction:column;gap:11px;}
+.erow{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.ef-f label{display:block;font-size:11px;font-weight:700;color:var(--mut);margin-bottom:5px;font-family:'Tajawal',sans-serif;}
+.ef-f input,.ef-f select,.ef-f textarea{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:9px 11px;color:var(--txt);font-size:12px;outline:none;-webkit-appearance:none;font-family:'Cairo',sans-serif;transition:border-color .2s;}
+.ef-f input:focus,.ef-f select:focus,.ef-f textarea:focus{border-color:var(--acc);}
+.ef-f input[type="date"]{color-scheme:dark;}
+.ef-f textarea{resize:none;min-height:72px;line-height:1.5;}
+.ef-btns{display:flex;gap:8px;margin-top:4px;}
+.ef-btns button{flex:1;padding:12px;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
+.ef-save{background:linear-gradient(135deg,var(--acc),#1a7f37);color:#fff;}
+.ef-cancel{background:var(--sur2);border:1px solid var(--bdr)!important;border:none;color:var(--mut);}
+
+/* Confirm delete */
+.conf{text-align:center;padding:8px 0 4px;}
+.conf h3{font-size:17px;font-weight:900;margin-bottom:8px;}
+.conf p{font-size:13px;color:var(--mut);font-family:'Tajawal',sans-serif;margin-bottom:20px;line-height:1.6;}
+.conf-btns{display:flex;gap:8px;}
+.conf-del{flex:1;padding:12px;background:var(--red);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
+.conf-no{flex:1;padding:12px;background:var(--sur2);border:1px solid var(--bdr);color:var(--mut);border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--sur2);border:1px solid var(--bdr);border-radius:10px;padding:11px 20px;font-size:13px;font-family:'Tajawal',sans-serif;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(46,164,79,.4);color:var(--acc2);}
+.toast.err{border-color:rgba(248,81,73,.4);color:var(--red);}
+.toast.inf{border-color:rgba(56,139,253,.3);color:var(--blue);}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="loginPage">
+  <div class="lcard">
+    <div class="llogo">📊</div>
+    <h1>لوحة تحكم FDP</h1>
+    <div class="sub">Manager Dashboard · للمدراء فقط</div>
+    <div class="pw-wrap">
+      <input class="pw-inp" type="password" id="pwInp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="pw-eye" onclick="togglePw()">👁</button>
+    </div>
+    <button class="lbtn" onclick="doLogin()">دخول · Login ←</button>
+    <div class="lerr" id="lerr"></div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashPage">
+
+  <div class="topbar">
+    <div class="tb-l">
+      <div class="tb-logo">📊</div>
+      <div>
+        <div class="tb-title">لوحة تحكم FDP · Dashboard</div>
+        <div class="tb-sub">نظام متابعة المشاريع · Project Monitoring</div>
+      </div>
+    </div>
+    <div class="tb-r">
+      <span class="updt" id="updt"></span>
+      <button class="btn g" onclick="loadData()">🔄 تحديث · Refresh</button>
+      <button class="btn b" onclick="showAdd()">➕ إضافة · Add</button>
+      <button class="btn" onclick="doLogout()">خروج · Logout</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" onclick="goTab('ov')">📊 نظرة عامة · Overview</div>
+    <div class="tab" onclick="goTab('al')">🚨 التنبيهات · Alerts</div>
+    <div class="tab" onclick="goTab('rp')">📋 التقارير · Reports</div>
+    <div class="tab" onclick="goTab('st')">📈 الإحصائيات · Stats</div>
+  </div>
+
+  <div class="main">
+
+    <div class="loading" id="ldiv">
+      <div class="spin"></div>
+      <div class="ltxt">جارٍ تحميل البيانات · Loading data...</div>
+    </div>
+
+    <div id="ediv" style="display:none;">
+      <div class="errbox">
+        <h3>❌ تعذّر تحميل البيانات · Failed to load</h3>
+        <p id="emsg"></p>
+        <button class="btn g" style="padding:9px 18px;" onclick="loadData()">🔄 إعادة المحاولة · Retry</button>
+      </div>
+    </div>
+
+    <div id="dcont" style="display:none;">
+
+      <!-- ══ OVERVIEW ══ -->
+      <div class="tabpage on" id="tab-ov">
+        <div class="sh">الإحصائيات الرئيسية · Key Statistics</div>
+        <div class="stats" id="statsDiv"></div>
+
+        <div class="sh">أداء المرشدين · Advisor Performance</div>
+        <div id="advDiv" style="margin-bottom:16px;"></div>
+
+        <div class="sh">أحدث التقارير · Latest Reports</div>
+        <div id="latestDiv"></div>
+      </div>
+
+      <!-- ══ ALERTS ══ -->
+      <div class="tabpage" id="tab-al">
+        <div class="sh-row">
+          <div class="sh">التنبيهات النشطة · Active Alerts</div>
+          <span id="alertCount" style="font-size:11px;color:var(--mut);font-family:'Tajawal',sans-serif;"></span>
+        </div>
+        <div id="alertDiv"></div>
+      </div>
+
+      <!-- ══ REPORTS ══ -->
+      <div class="tabpage" id="tab-rp">
+        <div class="twrap">
+          <div class="ttop">
+            <h3>📋 جميع التقارير · All Reports &nbsp;<span id="tcnt" style="color:var(--acc2);"></span></h3>
+            <div class="tctrl">
+              <input type="text" class="srch" id="srch" placeholder="🔍 بحث · Search" oninput="applyF()">
+              <select class="fsel" id="fgov" onchange="applyF()"><option value="">كل المحافظات</option></select>
+              <select class="fsel" id="fadv" onchange="applyF()"><option value="">كل المرشدين</option></select>
+              <select class="fsel" id="fst" onchange="applyF()">
+                <option value="">كل الحالات</option>
+                <option value="جيد">دخل جيد · Good</option>
+                <option value="متوسط">دخل متوسط · Average</option>
+                <option value="ضعيف">دخل ضعيف · Low</option>
+                <option value="متعثر">متعثر · Struggling</option>
+                <option value="توقف">قريب من التوقف · Near Closure</option>
+              </select>
+            </div>
+          </div>
+          <div class="tscrl">
+            <table>
+              <thead><tr>
+                <th>#</th>
+                <th>المرشد · Advisor</th>
+                <th>المستفيد · Beneficiary</th>
+                <th>كود · Code</th>
+                <th>المشروع · Project</th>
+                <th>المحافظة · Gov.</th>
+                <th>التاريخ · Date</th>
+                <th>الحالة · Status</th>
+                <th>السداد · Repay</th>
+                <th>التوصية · Rec.</th>
+                <th>إجراءات · Actions</th>
+              </tr></thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+          <div class="pag">
+            <span class="pag-info" id="pinfo"></span>
+            <div class="pag-btns">
+              <button class="pbtn" id="pprev" onclick="chPg(-1)">→ السابق</button>
+              <button class="pbtn" id="pnext" onclick="chPg(1)">التالي ←</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STATS ══ -->
+      <div class="tabpage" id="tab-st">
+
+        <div class="sh">حالة المشاريع الحالية · Current Project Status</div>
+        <div id="stNowDiv" style="margin-bottom:16px;"></div>
+
+        <div class="sh">حالة المشاريع قبل التمويل · Status Before Funding</div>
+        <div id="stBefDiv" style="margin-bottom:16px;"></div>
+
+        <div class="sh">الالتزام بالسداد · Repayment Commitment</div>
+        <div id="repDiv" style="margin-bottom:16px;"></div>
+
+        <div class="sh">تغطية نفقات الأسرة · Family Expense Coverage</div>
+        <div id="covDiv" style="margin-bottom:16px;"></div>
+
+        <div class="sh">توصيات المرشدين · Advisor Recommendations</div>
+        <div id="recDiv" style="margin-bottom:16px;"></div>
+
+        <div class="sh">توزيع المشاريع حسب المحافظة · Projects by Governorate</div>
+        <div class="mgrid" id="govDiv" style="margin-bottom:16px;"></div>
+
+        <div class="sh">الدعم الاجتماعي · Social Support</div>
+        <div id="socDiv"></div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- VIEW MODAL -->
+<div class="mbg" id="vmbg" onclick="if(event.target===this)closeMod('v')">
+  <div class="mbox">
+    <div class="mhdr">
+      <h2 id="vtitle"></h2>
+      <div class="mclose" onclick="closeMod('v')">✕</div>
+    </div>
+    <div id="vbody"></div>
+    <div class="mactions">
+      <button class="mbtn-e" onclick="editFrom()">✏️ تعديل · Edit</button>
+      <button class="mbtn-d" onclick="delFrom()">🗑️ حذف · Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT/ADD MODAL -->
+<div class="mbg" id="embg" onclick="if(event.target===this)closeMod('e')">
+  <div class="mbox">
+    <div class="mhdr">
+      <h2 id="etitle">تعديل التقرير · Edit Report</h2>
+      <div class="mclose" onclick="closeMod('e')">✕</div>
+    </div>
+    <div class="eform" id="eform"></div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="mbg" id="cmbg" onclick="if(event.target===this)closeMod('c')">
+  <div class="mbox" style="max-width:380px;">
+    <div class="mhdr">
+      <h2>تأكيد الحذف · Confirm Delete</h2>
+      <div class="mclose" onclick="closeMod('c')">✕</div>
+    </div>
+    <div class="conf">
+      <h3>⚠️ هل أنت متأكد؟</h3>
+      <p id="cmsg">سيتم حذف هذا التقرير نهائياً<br>This action cannot be undone.</p>
+      <div class="conf-btns">
+        <button class="conf-del" onclick="doDelete()">🗑️ نعم، احذف · Delete</button>
+        <button class="conf-no" onclick="closeMod('c')">إلغاء · Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ CONFIG ══
+var READ_API  = 'https://script.google.com/macros/s/AKfycbw4uSljY1N3k1_WzZW_CnasKklfBCsfjTuunRY39MEk76ZeG9ZEob8FdAazbbZ1VQov7Q/exec';
+var WRITE_API = 'https://script.google.com/macros/s/AKfycbwJYPb_k5s5jJxonaoFaQ-Etb6IAD_5AOJ_zBRz1h5oV_h5rAkYQ-hI79BMO6yhcjks/exec';
+var PWD = 'ALI#763888';
+var allData=[], filtered=[], curPage=1, perPage=20, selIdx=-1;
+
+// ══ LOGIN ══
+function togglePw(){ var i=document.getElementById('pwInp'); i.type=i.type==='password'?'text':'password'; }
+function doLogin(){
+  if(document.getElementById('pwInp').value===PWD){
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('dashPage').style.display='block';
+    loadData();
+  } else { document.getElementById('lerr').textContent='❌ كلمة المرور غير صحيحة · Wrong password'; document.getElementById('pwInp').value=''; }
+}
+function doLogout(){ document.getElementById('dashPage').style.display='none'; document.getElementById('loginPage').style.display='flex'; }
+
+// ══ LOAD ══
+function loadData(){
+  show('ldiv'); hide('dcont'); hide('ediv');
+  fetch(READ_API)
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(d){
+      allData = Array.isArray(d) ? d.filter(function(r){ return r&&(r['اسم المستفيد']||r['اسم المشروع']); }) : [];
+      filtered = allData.slice();
+      buildFilters();
+      renderAll();
+      document.getElementById('updt').textContent = 'آخر تحديث · Last update: '+new Date().toLocaleTimeString('ar-SA');
+      hide('ldiv'); show('dcont');
+    })
+    .catch(function(e){
+      hide('ldiv'); show('ediv');
+      document.getElementById('emsg').textContent = e.message + ' — تأكد من مشاركة Google Sheets للعموم';
+    });
+}
+
+// ══ HELPERS ══
+function show(id){ document.getElementById(id).style.display='block'; }
+function hide(id){ document.getElementById(id).style.display='none'; }
+function g(r,k){ return r&&r[k]!==undefined&&r[k]!==null ? String(r[k]).trim() : ''; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function pillCls(t){
+  if(!t) return 'b';
+  if(t.includes('جيد')||t.includes('ملتزم')) return 'g';
+  if(t.includes('متوسط')||t.includes('أحياناً')) return 'y';
+  if(t.includes('ضعيف')||t.includes('متعثر')||t.includes('متكرر')||t.includes('توقف')) return 'r';
+  return 'b';
+}
+
+function countBy(arr,k){
+  var m={};
+  arr.forEach(function(r){
+    var v=g(r,k).replace(/[🆕✅⏸️⚠️🔴🟠🟡🟢💚❌💰🎓🚨📅💸🏠🔑🤝]/gu,'').trim();
+    if(v) m[v]=(m[v]||0)+1;
+  });
+  return m;
+}
+
+// ══ TABS ══
+function goTab(n){
+  document.querySelectorAll('.tab').forEach(function(t,i){ t.classList.toggle('on',['ov','al','rp','st'][i]===n); });
+  document.querySelectorAll('.tabpage').forEach(function(p){ p.classList.remove('on'); });
+  document.getElementById('tab-'+n).classList.add('on');
+}
+
+// ══ FILTERS ══
+function buildFilters(){
+  var govs=[...new Set(allData.map(function(r){return g(r,'المحافظة');}).filter(Boolean))].sort();
+  var advs=[...new Set(allData.map(function(r){return g(r,'اسم المرشد');}).filter(Boolean))].sort();
+  var gs=document.getElementById('fgov'); gs.innerHTML='<option value="">كل المحافظات · All Gov.</option>';
+  govs.forEach(function(x){ gs.innerHTML+='<option>'+x+'</option>'; });
+  var as=document.getElementById('fadv'); as.innerHTML='<option value="">كل المرشدين · All Advisors</option>';
+  advs.forEach(function(x){ as.innerHTML+='<option>'+x+'</option>'; });
+}
+
+function applyF(){
+  var q=document.getElementById('srch').value.toLowerCase();
+  var gov=document.getElementById('fgov').value;
+  var adv=document.getElementById('fadv').value;
+  var st=document.getElementById('fst').value;
+  filtered=allData.filter(function(r){
+    var mq=!q||[g(r,'اسم المستفيد'),g(r,'اسم المشروع'),g(r,'اسم المرشد'),g(r,'كود العائلة'),g(r,'رقم هوية المستفيد'),g(r,'المحافظة'),g(r,'المدينة')].some(function(f){return f.toLowerCase().includes(q);});
+    return mq&&(!gov||g(r,'المحافظة')===gov)&&(!adv||g(r,'اسم المرشد')===adv)&&(!st||g(r,'حالة المشروع حالياً').includes(st));
+  });
+  curPage=1; renderTable();
+  document.getElementById('tcnt').textContent='('+filtered.length+')';
+}
+
+// ══ RENDER ALL ══
+function renderAll(){
+  renderStats(); renderAlerts(); renderAdvisors(); renderLatest();
+  renderTable(); renderStatCharts(); renderGov(); renderSoc();
+  document.getElementById('tcnt').textContent='('+filtered.length+')';
+}
+
+// ══ STATS CARDS ══
+function renderStats(){
+  var n=allData.length;
+  var good=cnt(allData,'حالة المشروع حالياً','جيد');
+  var avg=cnt(allData,'حالة المشروع حالياً','متوسط');
+  var str=cnt(allData,'حالة المشروع حالياً','متعثر');
+  var cls=cnt(allData,'حالة المشروع حالياً','توقف');
+  var urg=cnt(allData,'توصية المرشد','عاجل');
+  var fund=cnt(allData,'توصية المرشد','تمويل');
+  var late=cnt(allData,'الالتزام بالسداد','متكرر');
+  var ontr=cnt(allData,'هل المشروع وفق الخطة','نعم');
+
+  document.getElementById('statsDiv').innerHTML=
+    sc('📋',n,'إجمالي التقارير\nTotal Reports','cb')+
+    sc('💚',good,'مشاريع دخل جيد\nGood Income','cg')+
+    sc('🟡',avg,'دخل متوسط\nAverage Income','cy')+
+    sc('⚠️',str,'مشاريع متعثرة\nStruggling','cy')+
+    sc('🔴',cls,'قريبة من التوقف\nNear Closure','cr')+
+    sc('🚨',urg,'تحتاج تدخلاً عاجلاً\nUrgent Intervention','cr')+
+    sc('💰',fund,'تحتاج تمويلاً\nNeeds Funding','co')+
+    sc('✅',ontr,'وفق الخطة\nOn Track','cg');
+}
+
+function cnt(arr,k,q){ return arr.filter(function(r){return g(r,k).includes(q);}).length; }
+function sc(i,n,l,c){
+  var lines=l.split('\n');
+  return '<div class="stat '+c+'"><div class="stat-i">'+i+'</div><div class="stat-n">'+n+'</div><div class="stat-l">'+lines[0]+'<br><span style="font-size:9px;opacity:.7;">'+lines[1]+'</span></div></div>';
+}
+
+// ══ ALERTS ══
+function renderAlerts(){
+  var als=[]; var today=new Date();
+  allData.forEach(function(r,idx){
+    var proj=g(r,'اسم المشروع')||'—', ben=g(r,'اسم المستفيد')||'—';
+    var gov=g(r,'المحافظة'), adv=g(r,'اسم المرشد');
+    var stN=g(r,'حالة المشروع حالياً'), rep=g(r,'الالتزام بالسداد'), rec=g(r,'توصية المرشد'), nf=g(r,'موعد المتابعة القادمة');
+
+    if(stN.includes('توقف'))
+      als.push({t:'urg',i:'🔴',ti:'مشروع في طريقه للتوقف · Near Closure',s:proj+' — '+ben+' ('+gov+')',b:'عاجل',bc:'r',idx:idx});
+    if(rec.includes('عاجل'))
+      als.push({t:'urg',i:'🚨',ti:'تدخل عاجل مطلوب · Urgent Intervention',s:proj+' — مرشد: '+adv,b:'عاجل',bc:'r',idx:idx});
+    if(stN.includes('متعثر'))
+      als.push({t:'wrn',i:'⚠️',ti:'مشروع متعثر · Struggling Project',s:proj+' — '+ben+' ('+gov+')',b:'تنبيه',bc:'y',idx:idx});
+    if(rep.includes('متكرر'))
+      als.push({t:'wrn',i:'💸',ti:'تأخر متكرر في السداد · Frequent Late Payment',s:ben+' — '+proj,b:'سداد',bc:'y',idx:idx});
+    if(rec.includes('تمويل'))
+      als.push({t:'inf',i:'💰',ti:'يُنصح بتمويل إضافي · Additional Funding Recommended',s:proj+' — '+ben,b:'تمويل',bc:'b',idx:idx});
+    if(nf){
+      try{
+        var nd=new Date(nf), diff=Math.ceil((nd-today)/864e5);
+        if(diff<0) als.push({t:'wrn',i:'📅',ti:'موعد متابعة متأخر ('+Math.abs(diff)+' يوم) · Overdue Visit',s:proj+' — '+ben,b:'متأخر',bc:'y',idx:idx});
+        else if(diff<=3) als.push({t:'inf',i:'🔔',ti:'موعد متابعة خلال '+diff+' أيام · Upcoming Visit',s:proj+' — '+ben,b:'قريب',bc:'b',idx:idx});
+      }catch(e){}
+    }
+  });
+
+  als.sort(function(a,b){ return a.t==='urg'?-1:b.t==='urg'?1:0; });
+  document.getElementById('alertCount').textContent = als.length+' تنبيه · alert(s)';
+
+  var html='';
+  if(!als.length){ html='<div class="nodata">✅ لا توجد تنبيهات حالياً · No active alerts</div>'; }
+  else { als.forEach(function(a){ html+='<div class="alert '+a.t+'" onclick="showView('+a.idx+')">'+'<div class="al-i">'+a.i+'</div><div class="al-b"><div class="al-t">'+esc(a.ti)+'</div><div class="al-s">'+esc(a.s)+'</div></div><span class="badge '+a.bc+'">'+a.b+'</span></div>'; }); }
+  document.getElementById('alertDiv').innerHTML=html;
+}
+
+// ══ ADVISORS ══
+function renderAdvisors(){
+  var map={};
+  allData.forEach(function(r){
+    var a=g(r,'اسم المرشد'); if(!a)return;
+    if(!map[a])map[a]={t:0,u:0,gd:0,str:0};
+    map[a].t++;
+    if(g(r,'حالة المشروع حالياً').includes('توقف')) map[a].u++;
+    if(g(r,'حالة المشروع حالياً').includes('جيد')) map[a].gd++;
+    if(g(r,'حالة المشروع حالياً').includes('متعثر')) map[a].str++;
+  });
+  var sorted=Object.entries(map).sort(function(a,b){return b[1].t-a[1].t;});
+  var html='';
+  sorted.forEach(function(e){
+    var n=e[0],d=e[1];
+    var badges='';
+    if(d.gd) badges+=' <span class="badge g">'+d.gd+' جيد</span>';
+    if(d.str) badges+=' <span class="badge y">'+d.str+' متعثر</span>';
+    if(d.u) badges+=' <span class="badge r">'+d.u+' عاجل</span>';
+    html+='<div class="mcard" style="margin-bottom:8px;">';
+    html+='<div class="mcard-l"><div class="ml">👤 '+esc(n)+'</div><div class="ms">'+d.t+' تقرير · report(s)&nbsp;'+badges+'</div></div>';
+    html+='<div class="mcard-n">'+d.t+'</div></div>';
+  });
+  document.getElementById('advDiv').innerHTML=html||'<div class="nodata">لا توجد بيانات</div>';
+}
+
+// ══ LATEST REPORTS ══
+function renderLatest(){
+  var last=allData.slice(-5).reverse();
+  var html='<div style="display:flex;flex-direction:column;gap:8px;">';
+  last.forEach(function(r,i){
+    var idx=allData.indexOf(r);
+    html+='<div class="mcard" style="cursor:pointer;" onclick="showView('+idx+')">';
+    html+='<div class="mcard-l"><div class="ml">'+esc(g(r,'اسم المشروع'))+'</div><div class="ms">'+esc(g(r,'اسم المستفيد'))+' · '+esc(g(r,'المحافظة'))+' · '+esc(g(r,'تاريخ التقرير'))+'</div></div>';
+    html+='<span class="pill '+pillCls(g(r,'حالة المشروع حالياً'))+'">'+esc(g(r,'حالة المشروع حالياً').substring(0,12))+'</span></div>';
+  });
+  html+='</div>';
+  document.getElementById('latestDiv').innerHTML=html||'<div class="nodata">لا توجد بيانات</div>';
+}
+
+// ══ TABLE ══
+function renderTable(){
+  var s=(curPage-1)*perPage, page=filtered.slice(s,s+perPage), html='';
+  page.forEach(function(r,i){
+    var idx=allData.indexOf(r);
+    var stN=g(r,'حالة المشروع حالياً'), rep=g(r,'الالتزام بالسداد'), rec=g(r,'توصية المرشد');
+    html+='<tr>';
+    html+='<td style="color:var(--mut);">'+(s+i+1)+'</td>';
+    html+='<td>'+esc(g(r,'اسم المرشد'))+'</td>';
+    html+='<td><div>'+esc(g(r,'اسم المستفيد'))+'</div><div style="font-size:9px;color:var(--mut);">'+esc(g(r,'رقم هوية المستفيد'))+'</div></td>';
+    html+='<td style="font-size:10px;">'+esc(g(r,'كود العائلة'))+'</td>';
+    html+='<td>'+esc(g(r,'اسم المشروع'))+'</td>';
+    html+='<td>'+esc(g(r,'المحافظة'))+'</td>';
+    html+='<td style="font-size:10px;white-space:nowrap;">'+esc(g(r,'تاريخ التقرير'))+'</td>';
+    html+='<td><span class="pill '+pillCls(stN)+'">'+esc(stN.substring(0,14))+'</span></td>';
+    html+='<td><span class="pill '+pillCls(rep)+'">'+esc(rep.substring(0,12))+'</span></td>';
+    html+='<td style="font-size:10px;">'+esc(rec.substring(0,14))+'</td>';
+    html+='<td><div class="abtns"><button class="abtn v" onclick="showView('+idx+')">👁</button><button class="abtn e" onclick="showEdit('+idx+')">✏️</button><button class="abtn d" onclick="showDel('+idx+')">🗑️</button></div></td>';
+    html+='</tr>';
+  });
+  document.getElementById('tbody').innerHTML=html||'<tr><td colspan="11" style="text-align:center;padding:28px;color:var(--mut);">لا توجد نتائج · No results</td></tr>';
+  var tp=Math.max(1,Math.ceil(filtered.length/perPage));
+  document.getElementById('pinfo').textContent='صفحة '+curPage+' من '+tp+' | '+filtered.length+' سجل · record(s)';
+  document.getElementById('pprev').disabled=curPage<=1;
+  document.getElementById('pnext').disabled=curPage>=tp;
+}
+function chPg(d){ curPage+=d; renderTable(); window.scrollTo(0,0); }
+
+// ══ STAT CHARTS (Progress Bars) ══
+function renderStatCharts(){
+  pbars('stNowDiv', allData, 'حالة المشروع حالياً', {'جيد':'#3fb950','متوسط':'#d29922','ضعيف':'#f0883e','متعثر':'#f85149','توقف':'#f85149'});
+  pbars('stBefDiv', allData, 'حالة المشروع قبل التمويل', {'جديد':'#388bfd','قائم':'#3fb950','متوقف':'#d29922','متعثر':'#f85149'});
+  pbars('repDiv',   allData, 'الالتزام بالسداد', {'ملتزم':'#3fb950','أحياناً':'#d29922','متكرر':'#f85149'});
+  pbars('covDiv',   allData, 'تغطية دخل المشروع لنفقات الأسرة', {'بالكامل':'#3fb950','75%':'#3fb950','50%':'#d29922','25%':'#f0883e','لا يغطي':'#f85149'});
+  pbars('recDiv',   allData, 'توصية المرشد', {'عادية':'#3fb950','مكثفة':'#d29922','تمويل':'#388bfd','استشاري':'#bc8cff','عاجل':'#f85149'});
+}
+
+function pbars(divId, arr, key, colorMap){
+  var m=countBy(arr,key);
+  var total=arr.length; if(!total){document.getElementById(divId).innerHTML='<div class="nodata">لا توجد بيانات</div>';return;}
+  var sorted=Object.entries(m).sort(function(a,b){return b[1]-a[1];});
+  var html='';
+  sorted.forEach(function(e){
+    var pct=Math.round(e[1]/total*100);
+    var col='#8b949e';
+    Object.keys(colorMap).forEach(function(k){ if(e[0].includes(k)) col=colorMap[k]; });
+    html+='<div class="pbar">';
+    html+='<div class="pbar-top"><span class="pbar-lbl">'+esc(e[0])+'</span><span class="pbar-val" style="color:'+col+';">'+e[1]+' <span style="font-size:11px;font-weight:600;opacity:.7;">('+pct+'%)</span></span></div>';
+    html+='<div class="pbar-bg"><div class="pbar-fill" style="width:'+pct+'%;background:'+col+';"></div></div>';
+    html+='</div>';
+  });
+  document.getElementById(divId).innerHTML=html;
+}
+
+// ══ GOV ══
+function renderGov(){
+  var m=countBy(allData,'المحافظة');
+  var s=Object.entries(m).sort(function(a,b){return b[1]-a[1];});
+  var html='';
+  s.forEach(function(e){
+    html+='<div class="mcard"><div class="mcard-l"><div class="ml">📍 '+esc(e[0])+'</div></div><div class="mcard-n">'+e[1]+'</div></div>';
+  });
+  document.getElementById('govDiv').innerHTML=html||'<div class="nodata">لا توجد بيانات</div>';
+}
+
+// ══ SOCIAL ══
+function renderSoc(){
+  var yes=cnt(allData,'هل كان هناك دعم اجتماعي','نعم');
+  var no=allData.length-yes;
+  var pct=allData.length?Math.round(yes/allData.length*100):0;
+  document.getElementById('socDiv').innerHTML=
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;">'+
+    '<div class="mcard"><div class="mcard-l"><div class="ml">تلقوا دعماً · Received</div></div><div class="mcard-n" style="color:var(--acc2);">'+yes+'</div></div>'+
+    '<div class="mcard"><div class="mcard-l"><div class="ml">بدون دعم · No Support</div></div><div class="mcard-n" style="color:var(--mut);">'+no+'</div></div>'+
+    '<div class="mcard"><div class="mcard-l"><div class="ml">النسبة · Rate</div></div><div class="mcard-n" style="color:var(--blue);">'+pct+'%</div></div>'+
+    '</div>';
+}
+
+// ══ VIEW ══
+function showView(idx){
+  selIdx=idx; var r=allData[idx]; if(!r)return;
+  document.getElementById('vtitle').textContent=g(r,'اسم المشروع')+' — '+g(r,'اسم المستفيد');
+  var secs=[
+    {t:'المرشد · Advisor',rows:[
+      ['اسم المرشد · Advisor',g(r,'اسم المرشد')],['العملة · Currency',g(r,'العملة المستخدمة')],
+      ['تاريخ التقرير · Date',g(r,'تاريخ التقرير')],['أول متابعة · First Visit',g(r,'هل هذه أول متابعة')],
+      ['آخر متابعة · Last Visit',g(r,'تاريخ آخر متابعة سابقة')],['المتابعة القادمة · Next',g(r,'موعد المتابعة القادمة')],
+    ]},
+    {t:'المشروع · Project',rows:[
+      ['كود العائلة · Code',g(r,'كود العائلة')],['رقم الهوية · ID',g(r,'رقم هوية المستفيد')],
+      ['اسم المستفيد · Name',g(r,'اسم المستفيد')],['الهاتف · Phone',g(r,'رقم هاتف المستفيد')],
+      ['المحافظة · Gov.',g(r,'المحافظة')],['المدينة · City',g(r,'المدينة')],
+      ['المرشد السابق · Prev.',g(r,'المرشد السابق')||'—'],
+      ['اسم المشروع · Project',g(r,'اسم المشروع')],['نوع المشروع · Type',g(r,'نوع المشروع')],
+      ['سنة التمويل · Year',g(r,'سنة التمويل')],['عدد الدفعات · Installments',g(r,'عدد دفعات التمويل')],
+      ['مبلغ التمويل · Funding',g(r,'مبلغ التمويل')],['رأس المال · Capital',g(r,'رأس المال الحالي')||'—'],
+      ['أفراد الأسرة · Family',g(r,'عدد أفراد الأسرة')||'—'],['العمال الدائمين · Workers',g(r,'عدد العمال الدائمين')||'—'],
+    ]},
+    {t:'الحالة · Status',rows:[
+      ['قبل التمويل · Before',g(r,'حالة المشروع قبل التمويل')],['حالياً · Current',g(r,'حالة المشروع حالياً')],
+      ['الملكية · Ownership',g(r,'حالة ملكية المكان')],['قيمة الإيجار · Rent',g(r,'قيمة الإيجار الشهري')||'—'],
+      ['دعم اجتماعي · Social',g(r,'هل كان هناك دعم اجتماعي')],
+      ['نوع الدعم · Type',g(r,'نوع الدعم الاجتماعي')||'—'],['قيمة الدعم · Value',g(r,'قيمة الدعم الاجتماعي')||'—'],
+    ]},
+    {t:'الأداء · Performance',rows:[
+      ['الدخل الشهري · Income',g(r,'الدخل الشهري')||'—'],
+      ['تغطية النفقات · Coverage',g(r,'تغطية دخل المشروع لنفقات الأسرة')||'—'],
+      ['وفق الخطة · On Track',g(r,'هل المشروع وفق الخطة')],
+      ['دفعات منجزة · Paid',g(r,'عدد الدفعات المنجزة')||'—'],
+      ['دفعات متبقية · Remaining',g(r,'عدد الدفعات المتبقية')||'—'],
+      ['الالتزام · Commitment',g(r,'الالتزام بالسداد')],
+    ]},
+    {t:'التقييم · Evaluation',rows:[
+      ['التحديات · Challenges',g(r,'التحديات')||'—'],
+      ['الدعم المطلوب · Support',g(r,'الدعم المطلوب')||'—'],
+      ['التوصية · Recommendation',g(r,'توصية المرشد')],
+      ['ملاحظات · Notes',g(r,'الملاحظات الإضافية')||'—'],
+    ]},
+  ];
+  var html='';
+  secs.forEach(function(s){ html+='<div class="msec">'+s.t+'</div>'; s.rows.forEach(function(rw){ html+='<div class="mrow"><div class="mk">'+esc(rw[0])+'</div><div class="mv">'+esc(rw[1])+'</div></div>'; }); });
+  document.getElementById('vbody').innerHTML=html;
+  document.getElementById('vmbg').classList.add('show');
+}
+function editFrom(){ var i=selIdx; closeMod('v'); showEdit(i); }
+function delFrom(){ var i=selIdx; closeMod('v'); showDel(i); }
+
+// ══ EDIT ══
+var FIELDS=[
+  {k:'اسم المرشد',l:'اسم المرشد · Advisor'},{k:'العملة المستخدمة',l:'العملة · Currency'},
+  {k:'تاريخ التقرير',l:'تاريخ التقرير · Date',t:'date'},{k:'هل هذه أول متابعة',l:'أول متابعة؟'},
+  {k:'تاريخ آخر متابعة سابقة',l:'آخر متابعة · Last Visit',t:'date'},
+  {k:'موعد المتابعة القادمة',l:'المتابعة القادمة · Next F-U',t:'date'},
+  {k:'كود العائلة',l:'كود العائلة · Code'},{k:'رقم هوية المستفيد',l:'رقم الهوية · ID'},
+  {k:'اسم المستفيد',l:'اسم المستفيد · Name'},{k:'رقم هاتف المستفيد',l:'رقم الهاتف · Phone'},
+  {k:'المحافظة',l:'المحافظة · Gov.'},{k:'المدينة',l:'المدينة · City'},
+  {k:'اسم المشروع',l:'اسم المشروع · Project'},{k:'نوع المشروع',l:'نوع المشروع · Type'},
+  {k:'سنة التمويل',l:'سنة التمويل · Year',t:'number'},{k:'عدد دفعات التمويل',l:'عدد الدفعات · Inst.',t:'number'},
+  {k:'مبلغ التمويل',l:'مبلغ التمويل · Funding',t:'number'},{k:'رأس المال الحالي',l:'رأس المال · Capital',t:'number'},
+  {k:'عدد أفراد الأسرة',l:'أفراد الأسرة · Family',t:'number'},{k:'عدد العمال الدائمين',l:'العمال الدائمين · Workers',t:'number'},
+  {k:'حالة المشروع قبل التمويل',l:'الحالة قبل التمويل · Before'},
+  {k:'حالة المشروع حالياً',l:'الحالة الحالية · Current'},
+  {k:'حالة ملكية المكان',l:'ملكية المكان · Ownership'},{k:'قيمة الإيجار الشهري',l:'قيمة الإيجار · Rent',t:'number'},
+  {k:'الدخل الشهري',l:'الدخل الشهري · Income',t:'number'},
+  {k:'تغطية دخل المشروع لنفقات الأسرة',l:'تغطية النفقات · Coverage'},
+  {k:'هل المشروع وفق الخطة',l:'وفق الخطة؟ · On Track'},
+  {k:'عدد الدفعات المنجزة',l:'دفعات منجزة · Paid',t:'number'},
+  {k:'عدد الدفعات المتبقية',l:'دفعات متبقية · Remaining',t:'number'},
+  {k:'الالتزام بالسداد',l:'الالتزام بالسداد · Commitment'},
+  {k:'التحديات',l:'التحديات · Challenges',t:'area'},
+  {k:'الدعم المطلوب',l:'الدعم المطلوب · Support Needed'},
+  {k:'توصية المرشد',l:'التوصية · Recommendation'},
+  {k:'الملاحظات الإضافية',l:'ملاحظات · Notes',t:'area'},
+];
+
+function buildForm(r){
+  var html=''; var i=0;
+  while(i<FIELDS.length){
+    var f=FIELDS[i];
+    var val=r?g(r,f.k):'';
+    if(f.t==='area'){
+      html+='<div class="ef-f"><label>'+f.l+'</label><textarea id="ef_'+i+'" rows="3">'+esc(val)+'</textarea></div>';
+      i++;
+    } else if(i+1<FIELDS.length && FIELDS[i+1].t!=='area'){
+      var f2=FIELDS[i+1]; var val2=r?g(r,f2.k):'';
+      html+='<div class="erow"><div class="ef-f"><label>'+f.l+'</label><input type="'+(f.t||'text')+'" id="ef_'+i+'" value="'+esc(val)+'"></div><div class="ef-f"><label>'+f2.l+'</label><input type="'+(f2.t||'text')+'" id="ef_'+(i+1)+'" value="'+esc(val2)+'"></div></div>';
+      i+=2;
+    } else {
+      html+='<div class="ef-f"><label>'+f.l+'</label><input type="'+(f.t||'text')+'" id="ef_'+i+'" value="'+esc(val)+'"></div>';
+      i++;
+    }
+  }
+  return html;
+}
+
+function showEdit(idx){
+  selIdx=idx; var r=allData[idx];
+  document.getElementById('etitle').textContent='✏️ تعديل التقرير · Edit Report';
+  var html=buildForm(r);
+  html+='<div class="ef-btns"><button class="ef-save" onclick="doEdit()">💾 حفظ التعديلات · Save</button><button class="ef-cancel" onclick="closeMod(\'e\')">إلغاء · Cancel</button></div>';
+  document.getElementById('eform').innerHTML=html;
+  document.getElementById('embg').classList.add('show');
+}
+
+function doEdit(){
+  var r=allData[selIdx]; if(!r)return;
+  var rowIdx=r['_row'];
+  var updated={};
+  FIELDS.forEach(function(f,i){ var el=document.getElementById('ef_'+i); if(el){ allData[selIdx][f.k]=el.value; updated[f.k]=el.value; } });
+  closeMod('e'); renderAll(); showToast('✅ تم حفظ التعديلات محلياً','ok');
+  if(rowIdx){
+    fetch(WRITE_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'update',rowIndex:rowIdx,data:updated})})
+      .catch(function(){});
+  }
+}
+
+// ══ DELETE ══
+function showDel(idx){
+  selIdx=idx; var r=allData[idx];
+  document.getElementById('cmsg').textContent='سيتم حذف: '+g(r,'اسم المشروع')+' — '+g(r,'اسم المستفيد')+'\nThis action cannot be undone.';
+  document.getElementById('cmbg').classList.add('show');
+}
+
+function doDelete(){
+  var r=allData[selIdx]; if(!r)return;
+  var rowIdx=r['_row'];
+  allData.splice(selIdx,1); filtered=allData.slice(); selIdx=-1;
+  closeMod('c'); renderAll(); showToast('🗑️ تم الحذف · Deleted','inf');
+  if(rowIdx){
+    fetch(WRITE_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',rowIndex:rowIdx})})
+      .catch(function(){});
+  }
+}
+
+// ══ ADD ══
+function showAdd(){
+  document.getElementById('etitle').textContent='➕ إضافة تقرير جديد · Add New Report';
+  var html=buildForm(null);
+  html+='<div class="ef-btns"><button class="ef-save" onclick="doAdd()">➕ إضافة · Add</button><button class="ef-cancel" onclick="closeMod(\'e\')">إلغاء · Cancel</button></div>';
+  document.getElementById('eform').innerHTML=html;
+  document.getElementById('embg').classList.add('show');
+}
+
+function doAdd(){
+  var newRow={'_row':null,'التاريخ والوقت':new Date().toISOString()};
+  FIELDS.forEach(function(f,i){ var el=document.getElementById('ef_'+i); if(el) newRow[f.k]=el.value; });
+  allData.push(newRow); filtered=allData.slice();
+  closeMod('e'); renderAll(); showToast('➕ تم الإضافة محلياً · Added locally','ok');
+  fetch(WRITE_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'add',data:newRow})})
+    .catch(function(){});
+}
+
+// ══ MODAL ══
+function closeMod(w){ document.getElementById(w+'mbg').classList.remove('show'); }
+
+// ══ TOAST ══
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+(type||'ok')+' show';
+  setTimeout(function(){ t.classList.remove('show'); },3000);
+}
+
+// ══ AUTO REFRESH (5 min) ══
+setInterval(function(){ if(document.getElementById('dashPage').style.display!=='none') loadData(); },300000);
+</script>
+</body>
+</html>
